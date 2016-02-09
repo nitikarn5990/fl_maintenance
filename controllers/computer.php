@@ -1,24 +1,19 @@
 <?php
-
-if ($_SESSION['group'] != 'admin') {
-    echo "<h1>ไม่พบหน้าที่คุณต้องการ</h1>";
-    die();
-}
 //ตรวจสอบถ้ามีการลบข้อมูล (ลบที่ละแถว)
 if ($_GET['action'] == 'del' && is_numeric($_GET['id']) && $_GET['id'] != '') {
 
-    if (delete("tb_staff", "id = " . $_GET['id'])) {
+    if (delete("tb_computer", "id = " . $_GET['id'])) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'staff');
+        header('location:' . ADDRESS . 'computer');
         die();
     }
 }
 //ตรวจสอบถ้ามีการลบข้อมูล (ลบที่ละหลายแถว)
 if (isset($_POST['select_all'])) {
     $all_id = implode(',', $_POST['select_all']);
-    if (delete("tb_staff", "id in(" . $all_id . ")")) {
+    if (delete("tb_computer", "id in(" . $all_id . ")")) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'staff');
+        header('location:' . ADDRESS . 'computer');
         die();
     }
 }
@@ -30,7 +25,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">จัดการข้อมูลเจ้าหน้าที่</h1>
+        <h1 class="page-header">จัดการข้อมูลคอมพิวเตอร์ </h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -38,20 +33,20 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            จัดการข้อมูลพนักงาน
+            จัดการข้อมูลคอมพิวเตอร์ 
         </p>
     </div>
 </div>
-<form action="" method="POST" id="frm_staff">
+<form action="" method="POST" id="frm_computer">
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    ข้อมูลเจ้าหน้าที่
+                    คอมพิวเตอร์ 
                 </div>
                 <div class="panel-toolbar">
                     <div class="btn-group"> 
-                        <a class="btn" href="<?= ADDRESS ?>staff_add"><i class="icol-add"></i> เพิ่มข้อมูล</a> 
+                        <a class="btn" href="<?= ADDRESS ?>computer_add"><i class="icol-add"></i> เพิ่มข้อมูล</a> 
 
                         <a href="javascript:;" onclick="frm_submit()" class="btn" id="btn-select-delete" ><i class="icol-cross"></i> ลบที่เลือก</a> 
                     </div>
@@ -64,31 +59,47 @@ Alert(GetAlert('success'), 'success');
                                 <thead>
                                     <tr>
                                         <th class="center"></th>
-                                        <th>รหัส</th>
-                                        <th>ชื่อ-สกุล</th>
+                                        <th>รหัสคอมพิวเตอร์</th>
+                                        <th>ภาพ</th>
+                                        <th>จำนวน</th>
+                                        <th>ราคา</th>
                                         <th>สถานะ</th>
-                                        <th>เบอร์โทร</th>
                                         <th>แก้ไขล่าสุด</th>
                                         <th>ตัวเลือก</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM tb_staff WHERE username != 'admin'";
+                                    $sql = "SELECT * FROM tb_computer WHERE status != 'แทงจำหน่าย'";
                                     $result = mysql_query($sql);
+                                    
+                                    $targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/' ;
 
                                     if (mysql_num_rows($result) > 0) {
                                         while ($row = mysql_fetch_assoc($result)) {
                                             ?>
                                             <tr class="">
                                                 <td class="center"> <input type="checkbox" name="select_all[]" class="checkboxes" value="<?= $row['id'] ?>" onclick="countSelect()"></td>
-                                                <td class="center"><?= $row['id'] ?></td>
-                                                <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
-                                                <td class="center"><span class="badge"><?= $row['status'] ?></span></td>
-                                                <td class="center"><?= $row['tel'] ?></td>
+                                                <td class="center"><?= $row['id']?></td>
+                                                <td><img src="<?= $targetPath.$row['image'] ?>" style="width: 75px;"></td>
+                                                <td class="center"><?= $row['qty'] ?></td>
+                                                <td class="center"><?= $row['cost'] ?></td>
+                                                <td class="center">
+                                                    <?php 
+                                                    if($row['status'] == 'ปกติ'){
+                                                        $class = 'btn-success';
+                                                    }else{
+                                                    
+                                                        $class = 'btn-warning';
+                                                    }
+                                                    ?>
+                                                    <div class="badge <?= $class ?>">
+                                                    <?=  $row['status']    ?>
+                                                    </div>
+                                                </td>
                                                 <td class="center"><?= ShowDateThTime($row['updated_at']) ?></td>
-                                                <td class="center "><a href="<?= ADDRESS ?>staff_edit&id=<?= $row['id'] ?>" class="btn btn-primary btn-small">แก้ไข / ดู</a> <a href="javascript:;" onclick="if (confirm('คุณต้องการลบข้อมูลนี้หรือใม่?') == true) {
-                                                                    document.location.href = '<?= ADDRESS ?>staff&id=<?= $row['id'] ?>&action=del'
+                                                <td class="center "><a href="<?= ADDRESS ?>computer_edit&id=<?= $row['id'] ?>" class="btn btn-primary btn-small">แก้ไข / ดู</a> <a href="javascript:;" onclick="if (confirm('คุณต้องการลบข้อมูลนี้หรือใม่?') == true) {
+                                                                    document.location.href = '<?= ADDRESS ?>computer&id=<?= $row['id'] ?>&action=del'
                                                                 }" class="btn btn-danger btn-small">ลบ</a></td>
                                             </tr>
 
@@ -128,7 +139,7 @@ Alert(GetAlert('success'), 'success');
 <script>
     function frm_submit() {
         if (confirm("คุณแน่ใจที่จะลบ?")) {
-            $("#frm_staff").submit();
+            $("#frm_computer").submit();
         }
 
 
@@ -157,5 +168,15 @@ Alert(GetAlert('success'), 'success');
         } else {
             $('#btn-select-delete').show();
         }
+
+        $('input.checkboxes[type=checkbox]').each(function () {
+            if ($(this).is(":checked")) {
+                $(this).closest('tr').css("background-color", "rgba(255, 235, 59, 0.46)");
+            } else {
+                $(this).closest('tr').css("background-color", "rgba(255, 235, 59, 0)");
+            }
+        });
     }
+
+
 </script>

@@ -5,11 +5,11 @@
 
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ทำการอัพเดรต ส่วนแรกคือชื่อฟิลล์ในฐานข้อมูล ส่วนที่สองคือ POST ที่มาจากฟอร์ม (จับคู่ให้ตรงกัน)
-    if ( $_SESSION['group'] == 'admin') {
+    if ($_SESSION['group'] == 'admin') {
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
-            "position" => $_POST['position'],
+ 
             "address" => $_POST['address'],
             "email" => $_POST['email'],
             "tel" => $_POST["tel"],
@@ -20,11 +20,11 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
-            "position" => $_POST['position'],
+        
             "address" => $_POST['address'],
             "email" => $_POST['email'],
             "tel" => $_POST["tel"],
-        
+            "status" => $_POST["status"],
             "updated_at" => DATE_TIME, //วันที่แก้ไข
         );
     }
@@ -162,13 +162,7 @@ Alert(GetAlert('success'), 'success');
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
-                                <div class="row  da-form-row">
-                                    <label class="col-md-2">ตำแหน่ง <span class="required">*</span></label>
-                                    <div class="col-md-10">
-                                        <input class="form-control input-sm" type="text" name="position" value="<?= isset($row['position']) ? $row['position'] : '' ?>">
-                                        <p class="help-block"></p>
-                                    </div>
-                                </div>
+
                                 <div class="row  da-form-row">
                                     <label class="col-md-2">ที่อยู่ <span class="required">*</span></label>
                                     <div class="col-md-10">
@@ -190,6 +184,17 @@ Alert(GetAlert('success'), 'success');
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
+                              <div class="row  da-form-row">
+                                <label class="col-md-2">สถานะ <span class="required">*</span></label>
+                                <div class="col-md-10">
+                                    <select name="status" class="form-control">
+                                        <option value="เจ้าหน้าที่">--- เลือกสถานะ ---</option>
+                                        <option value="เจ้าหน้าที่" <?= $row['status'] == 'เจ้าหน้าที่' ? 'selected' : '' ?>> เจ้าหน้าที่</option>
+                                        <option value="ผู้บริหาร" <?= $row['status'] == 'ผู้บริหาร' ? 'selected' : '' ?>> ผู้บริหาร</option>
+                                    </select>
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
                             <?php } ?>
                             <?php if ($_SESSION['group'] == 'admin') { ?>          
 

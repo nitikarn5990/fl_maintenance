@@ -10,7 +10,10 @@
                   <a href="<?=ADDRESS?>category" class="<?= substr($_GET['controllers'], 0,8) == 'category' ? 'active':''?>"> <i class="fa fa-table fa-fw"></i> ข้อมูลประเภทสื่อทัศนวัสดุ</a>
             </li>
             <li>
-                <a href="<?=ADDRESS?>media" class="<?= substr($_GET['controllers'], 0,5) == 'media' ? 'active':''?>"> <i class="fa fa-table fa-fw"></i> ข้อมูลสื่อทัศนวัสดุ</a>
+                <a href="<?=ADDRESS?>computer" class="<?= substr($_GET['controllers'], 0,8) == 'computer' ? 'active':''?>"> <i class="fa fa-table fa-fw"></i> ข้อมูลคอมพิวเตอร์</a>
+            </li>
+               <li>
+                <a href="<?=ADDRESS?>repair" class="<?= substr($_GET['controllers'], 0,6) == 'repair' ? 'active':''?>"> <i class="fa fa-table fa-fw"></i> แจ้งซ่อม</a>
             </li>
 
             <li>

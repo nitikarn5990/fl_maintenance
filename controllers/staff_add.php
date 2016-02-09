@@ -8,7 +8,7 @@ if ($_SESSION['group'] != 'admin') {
 
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     $sql_check_username = "SELECT * FROM tb_staff WHERE username = '" . $_POST['username'] . "'";
-    
+
     $result = mysql_query($sql_check_username);
     $num_row = mysql_num_rows($result); //หาว่ามีกี่แถว
     if ($num_row > 0) { //ถ้ามีมากกว่า 0 แสดงว่า username นี้มีการใช้ไปแล้ว
@@ -22,6 +22,7 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
             "address" => $_POST['address'],
             "email" => $_POST['email'],
             "tel" => $_POST['tel'],
+            "status" => $_POST['status'],
             "username" => $_POST['username'],
             "password" => $_POST['password'],
             "created_at" => DATE_TIME, //วันที่บันทึก
@@ -38,9 +39,16 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
             SetAlert('เกิดข้อผิดพลาดไม่สามารถเพิ่มข้อมูลได้'); //แสดงข้อมูลแจ้งเตือนถ้าไม่สำเร็จ
             header('location:' . ADDRESS . 'staff_add');
             die();
-            
         }
     }
+}
+
+
+$sql_status = "SELECT * FROM tb_staff WHERE id = " . $_SESSION['user_id'];
+$result = mysql_query($sql_status);
+$num_row = mysql_num_rows($result);
+if ($num_row == 1) {
+    $row = mysql_fetch_assoc($result);
 }
 ?>
 <?php
@@ -89,7 +97,7 @@ Alert(GetAlert('success'), 'success');
                                     <p class="help-block"></p>
                                 </div>
                             </div>
-                  
+
                             <div class="row  da-form-row">
                                 <label class="col-md-2">ที่อยู่ <span class="required">*</span></label>
                                 <div class="col-md-10">
@@ -108,6 +116,17 @@ Alert(GetAlert('success'), 'success');
                                 <label class="col-md-2">เบอร์ติดต่อ <span class="required">*</span></label>
                                 <div class="col-md-10">
                                     <input class="form-control input-sm" type="text" name="tel" value="<?= isset($_POST['tel']) ? $_POST['tel'] : '' ?>">
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row  da-form-row">
+                                <label class="col-md-2">สถานะ <span class="required">*</span></label>
+                                <div class="col-md-10">
+                                    <select name="status" class="form-control">
+                                        <option value="เจ้าหน้าที่">--- เลือกสถานะ ---</option>
+                                        <option value="เจ้าหน้าที่"> เจ้าหน้าที่</option>
+                                        <option value="ผู้บริหาร"> ผู้บริหาร</option>
+                                    </select>
                                     <p class="help-block"></p>
                                 </div>
                             </div>

@@ -2,18 +2,18 @@
 //ตรวจสอบถ้ามีการลบข้อมูล (ลบที่ละแถว)
 if ($_GET['action'] == 'del' && is_numeric($_GET['id']) && $_GET['id'] != '') {
 
-    if (delete("tb_media", "id = " . $_GET['id'])) {
+    if (delete("tb_repair", "id = " . $_GET['id'])) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'media');
+        header('location:' . ADDRESS . 'computer');
         die();
     }
 }
 //ตรวจสอบถ้ามีการลบข้อมูล (ลบที่ละหลายแถว)
 if (isset($_POST['select_all'])) {
     $all_id = implode(',', $_POST['select_all']);
-    if (delete("tb_media", "id in(" . $all_id . ")")) {
+    if (delete("tb_repair", "id in(" . $all_id . ")")) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'media');
+        header('location:' . ADDRESS . 'computer');
         die();
     }
 }
@@ -25,7 +25,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">จัดการสื่อทัศนวัสดุ</h1>
+        <h1 class="page-header">จัดการข้อมูลการแจ้งซ่อม</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -33,20 +33,20 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            จัดการสื่อทัศนวัสดุ
+            จัดการข้อมูลการแจ้งซ่อม
         </p>
     </div>
 </div>
-<form action="" method="POST" id="frm_media">
+<form action="" method="POST" id="frm_computer">
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    สื่อทัศนวัสดุ
+                    ข้อมูลการแจ้งซ่อม 
                 </div>
                 <div class="panel-toolbar">
                     <div class="btn-group"> 
-                        <a class="btn" href="<?= ADDRESS ?>media_add"><i class="icol-add"></i> เพิ่มข้อมูล</a> 
+                        <a class="btn" href="<?= ADDRESS ?>repair_add"><i class="icol-add"></i> เพิ่มข้อมูล</a> 
 
                         <a href="javascript:;" onclick="frm_submit()" class="btn" id="btn-select-delete" ><i class="icol-cross"></i> ลบที่เลือก</a> 
                     </div>
@@ -59,47 +59,60 @@ Alert(GetAlert('success'), 'success');
                                 <thead>
                                     <tr>
                                         <th class="center"></th>
-                                        <th>รหัส</th>
-                                        <th>ประเภท</th>
-                                        <th>ชื่อสื่อ</th>
-                                        <th>ภาพ</th>
-                                        <th>จำนวน</th>
-                                        <th>ราคา</th>
-                                        <th>สถานะ</th>
-                                        <th>แก้ไขล่าสุด</th>
+                                        <th>รหัสการแจ้งซ่อม</th>
+                                        <th>ชื่อผู้แจ้ง</th>
+                                        <th>จำนวนรายการ</th>
+                                        <th>รหัสอุปกรณ์ | สถานะ</th>
+                                        <th>วันเวลาที่แจ้งซ่อม</th>
                                         <th>ตัวเลือก</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM tb_media";
+                                    $sql = "SELECT * FROM tb_repair";
                                     $result = mysql_query($sql);
-                                    
-                                    $targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/' ;
+
+                                    $targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/';
 
                                     if (mysql_num_rows($result) > 0) {
                                         while ($row = mysql_fetch_assoc($result)) {
                                             ?>
                                             <tr class="">
                                                 <td class="center"> <input type="checkbox" name="select_all[]" class="checkboxes" value="<?= $row['id'] ?>" onclick="countSelect()"></td>
-                                                <td class="center"><?= $row['id']?></td>
-                                                <td><?= getDataDesc('name', 'tb_category', 'id = ' . $row['category_id']) //เรียกใช่ฟังชั่น 1)ชื่อฟิลด์ 2)ชื่อตาราง 3)where (เงื่อนไข)     ?></td> 
-                                                <td><?= $row['name'] ?></td>
-                                                <td><img src="<?= $targetPath.$row['image'] ?>" style="width: 75px;"></td>
-                                                <td class="center"><?= $row['qty'] ?></td>
-                                                <td class="center"><?= $row['cost'] ?></td>
-                                                <td><?= $row['status'] ?></td>
-                                                <td class="center"><?= ShowDateThTime($row['updated_at']) ?></td>
-                                                <td class="center "><a href="<?= ADDRESS ?>media_edit&id=<?= $row['id'] ?>" class="btn btn-primary btn-small">แก้ไข / ดู</a> <a href="javascript:;" onclick="if (confirm('คุณต้องการลบข้อมูลนี้หรือใม่?') == true) {
-                                                                    document.location.href = '<?= ADDRESS ?>media&id=<?= $row['id'] ?>&action=del'
+                                                <td class="center"><?= $row['id'] ?></td>
+                                                <td><?= $row['first_name'] . ' ' . $row['last_name'] ?></td>
+                                                <td class="center"><?= getDataCount('repair_id', 'tb_repair_list', 'repair_id = ' . $row['id']) ?></td>
+
+                                                <td class="center">
+                                                    <div class="">
+
+                                                        <?php
+                                                        $arr_com_id = arr_getDataDesc('computer_id', 'tb_repair_list', 'repair_id = ' . $row['id']);
+
+                                                        foreach ($arr_com_id as $value) {
+                                                            if (getDataDesc('status', 'tb_repair_list', 'repair_id = ' . $row['id']. ' AND computer_id = '.$value) == '') {
+                                                                $status = 'แจ้งซ่อม';
+                                                            }else{
+                                                                 $status = getDataDesc('status', 'tb_repair_list', 'repair_id = ' . $row['id']. ' AND computer_id = '.$value);
+                                                            }
+                                                            
+                                                            ?>
+                                                        <p class="badge "><?= $value .' | '. $status  ?></p><br>
+                                                        <?php }
+                                                        ?>
+                                                    </div>
+                                                </td>
+                                                <td class="center"><?= ($row['created_at']) ?></td>
+                                                <td class="center "><a href="<?= ADDRESS ?>repair_edit&id=<?= $row['id'] ?>" class="btn btn-primary btn-small">แก้ไข / ดู</a> <a href="javascript:;" onclick="if (confirm('คุณต้องการลบข้อมูลนี้หรือใม่?') == true) {
+                                                                    document.location.href = '<?= ADDRESS ?>repair&id=<?= $row['id'] ?>&action=del'
                                                                 }" class="btn btn-danger btn-small">ลบ</a></td>
                                             </tr>
 
 
-                                            <?php
-                                        }
-                                    }
-                                    ?>
+                                                                                                                                                                                   <?php
+                                                                                                                                                                               }
+                                                                                                                                                                           }
+                                                                                                                                                                           ?>
 
 
 
@@ -131,7 +144,7 @@ Alert(GetAlert('success'), 'success');
 <script>
     function frm_submit() {
         if (confirm("คุณแน่ใจที่จะลบ?")) {
-            $("#frm_media").submit();
+            $("#frm_computer").submit();
         }
 
 

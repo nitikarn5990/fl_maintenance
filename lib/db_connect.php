@@ -3,7 +3,7 @@
 $username = "root"; //username 
 $password = ""; //password
 $db_name = "db_maintenance"; //ชื่อฐานข้อมูล
-$hostname = "localhost"; 
+$hostname = "localhost";
 
 //เชื่อมต่อฐานข้อมูล MySQL
 $dbhandle = mysql_connect($hostname, $username, $password)
@@ -46,6 +46,35 @@ function getDataDesc($myID, $myTable, $myWhere) {
         if ($RecordCount > 0) {
             $Row = mysql_fetch_assoc($Query);
             return($Row["$myID"]);
+        } else {
+            return("");
+        }
+    } else {
+        return("");
+    }
+}
+
+function arr_getDataDesc($myID, $myTable, $myWhere) {
+
+
+    if ($myWhere != "") {
+        $SqlWhere = " WHERE " . $myWhere;
+    }
+
+    if ($myID != "") {
+        $sql = "SELECT $myID FROM " . $myTable . $SqlWhere;
+        $Query = mysql_query($sql);
+        $RecordCount = mysql_num_rows($Query);
+
+        if ($RecordCount > 0) {
+        //    $Row = mysql_fetch_assoc($Query);
+            
+            
+               while ($row = mysql_fetch_assoc($Query)) {
+                   $arrData[] = $row["$myID"];
+              }
+              
+            return $arrData;
         } else {
             return("");
         }

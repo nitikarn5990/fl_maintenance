@@ -2,44 +2,47 @@
 <?php
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     if ($_POST['media_id'] == '') {
-        SetAlert('กรุณาเลือกสื่อที่ต้องการจอง'); //แสดงข้อมูลแจ้งเตือน
+        SetAlert('กรุณาเลือกคอมพิวเตอร์ที่ต้องการแจ้งซ่อม'); //แสดงข้อมูลแจ้งเตือน
     } else {
         //ถ้าว่างทำส่วนนี้ คือ เพิม่ลงฐานข้อมูล
         $data = array(
-            "people_id" => $_POST['id'], //ID สมาชิก
-            "id_card" => $_POST['id_card'], //รหัสบัตรประชาชน
-            "booking_date" => DATE, //วันที่จอง
-            "status" => 'จองอยู่', // สถานะ
-            "comment" => $_POST['comment'], // สถานะ
-            "created_at" => DATE_TIME, //วันที่บันทึก
-            "updated_at" => DATE_TIME, //วันที่แก้ไข
+            "first_name" => $_POST['first_name'],
+            "last_name" => $_POST['last_name'],
+            "staff_id" => $_SESSION['staff_id'],
+            // "problem_description" => $_POST['problem_description'],
+            "created_at" => DATE_TIME, //
+            "updated_at" => DATE_TIME, //
         );
 
-// insert ข้อมูลลงในตาราง tb_booking โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
-        if (insert("tb_booking", $data)) { // บันทึกข้อมูลลงตาราง tb_booking 
-            if ($_POST['media_id'] != '') { //ถ้ามีรหัสสื่อ
+// insert ข้อมูลลงในตาราง tb_repair โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
+        if (insert("tb_repair", $data)) { // บันทึกข้อมูลลงตาราง tb_repair 
+            if ($_POST['media_id'] != '') { //ถ้ามีรหัสคอมพิวเตอร์
                 $arrIDMedia = explode(',', $_POST['media_id']);
 
-                $booking_id = getDataDescLastID("id", 'tb_booking');
+                $repair_id = getDataDescLastID("id", 'tb_repair');
                 foreach ($arrIDMedia as $value) {
                     $data = array(
-                        "booking_id" => $booking_id, //รหัสการจอง
-                        "media_id" => $value, //รหัสสื่อ
-                        "status" => 'จองอยู่'
+                        "repair_id" => $repair_id, //รหัสการแจ้ง
+                        "computer_id" => $value, //รหัสคอมพิวเตอร์
+                        "status" => '', //
+                        "problem_description" => $_POST['problem_description'],
+                        "created_at" => DATE_TIME, //
+                        "updated_at" => DATE_TIME, //
+                        "date_input" => DATE_TIME, //
                     );
-                    insert("tb_booking_list", $data);
+                    insert("tb_repair_list", $data);
                 }
             }
 
             SetAlert('เพิ่ม แก้ไข ข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-            header('location:' . ADDRESS . 'booking');
+            header('location:' . ADDRESS . 'repair');
             die();
         }
     }
 }
 
 
-//ลบสื่อ
+//ลบคอมพิวเตอร์
 if ($_POST['media_id'] != '') {
 
     $all_id = '';
@@ -49,11 +52,9 @@ if ($_POST['media_id'] != '') {
     foreach ($arrr as $v) {
         if ($_POST['delete_id'] != $v) {
             $all_id .= ',' . $v;
-       
         }
     }
     $all_id = substr($all_id, 1);
-
 }
 
 // แสดงการแจ้งเตือน
@@ -63,7 +64,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">เพิ่มข้อมูลการจอง</h1>
+        <h1 class="page-header">เพิ่มข้อมูลการแจ้ง</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -71,7 +72,7 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            <a href="<?= ADDRESS ?>booking">ข้อมูลการจองทั้งหมด</a>
+            <a href="<?= ADDRESS ?>repair">ข้อมูลการแจ้งทั้งหมด</a>
             เพิ่มข้อมูล
         </p>
     </div>
@@ -85,8 +86,8 @@ Alert(GetAlert('success'), 'success');
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form role="form" action="<?= ADDRESS ?>booking_add" method="POST">
-                            <div class="row da-form-row">
+                        <form role="form" action="<?= ADDRESS ?>repair_add" method="POST">
+                            <div class="row da-form-row hidden">
                                 <label class="col-md-2">รหัสบัตรประชาชน <span class="required">*</span></label>
                                 <div class="col-md-5">
                                     <input class="form-control input-sm" name="id_card" id="id_card" type="text" readonly="" value="<?= isset($_POST['id_card']) ? $_POST['id_card'] : '' ?>">
@@ -98,9 +99,31 @@ Alert(GetAlert('success'), 'success');
                                 </div>
                             </div>
                             <div class="row da-form-row">
-                                <label class="col-md-2">สื่อทัศนวัสดุ <span class="required">*</span></label>
-                                <div class="col-md-5">
+                                <label class="col-md-2">ชื่อ ผู้แจ้ง <span class="required">*</span></label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="first_name" value="<?= isset($_POST['first_name']) ? $_POST['first_name'] : '' ?>">
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row da-form-row">
+                                <label class="col-md-2">นามสกุล ผู้แจ้ง <span class="required">*</span></label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="last_name" value="<?= isset($_POST['last_name']) ? $_POST['last_name'] : '' ?>">
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row da-form-row">
+                                <label class="col-md-2">เบอร์ติดต่อ <span class="required">*</span></label>
+                                <div class="col-md-10">
+                                    <input type="text" class="form-control" name="tel" value="<?= isset($_POST['tel']) ? $_POST['tel'] : '' ?>">
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
+                            <div class="row da-form-row">
+                                <label class="col-md-2">เลือกคอมพิวเตอร์ <span class="required">*</span></label>
+                                <div class="col-md-8">
                                     <input type="hidden" name="delete_id" id="delete_id">
+
                                     <?php if ($all_id != '') { ?>
                                         <input class="form-control input-sm " name="media_id" id="media_id" type="hidden"  value="<?= $all_id ?>">
                                     <?php } else { ?>
@@ -109,14 +132,14 @@ Alert(GetAlert('success'), 'success');
                                     <?php } ?>
 
                                     <p class="help-block"></p>
-                                    <div id="table_media_list"></div>
+                                    <div id="table_computer_list"></div>
                                 </div>
                                 <div class="col-md-2">
                                     <a href="javascript:;" onclick="showMediaList()" class="btn btn-sm btn-primary">เลือก</a>
                                 </div>
                             </div>
 
-                            <div class="row da-form-row">
+                            <div class="row da-form-row hidden">
                                 <label class="col-md-2">หมายเหตุ </label>
                                 <div class="col-md-10">
                                     <textarea class="form-control" name="comment"><?= isset($_POST['comment']) ? $_POST['comment'] : '' ?></textarea>
@@ -152,11 +175,11 @@ Alert(GetAlert('success'), 'success');
         if ($('#media_id').val() != '') {
             $.ajax({
                 method: "GET",
-                url: "./ajax/get_media_table.php",
+                url: "./ajax/get_computer_table.php",
                 data: {id: $('#media_id').val()}
             }).success(function (html) {
                 //alert($('#media_id').val());
-                $('#table_media_list').html(html);
+                $('#table_computer_list').html(html);
             });
         }
     });
@@ -172,14 +195,14 @@ Alert(GetAlert('success'), 'success');
 
 
     function showList() {
-        var sList = PopupCenter("select_idcard.php?type=booking", "list", "900", "400");
+        var sList = PopupCenter("select_idcard.php?type=repair", "list", "900", "400");
 
     }
     function showMediaList() {
 
 
         var ID = $('#media_id').val();
-        var sList = PopupCenter("media_list.php?media_id=" + ID, "list", "900", "400");
+        var sList = PopupCenter("computer_list.php?media_id=" + ID, "list", "900", "400");
 
     }
 
@@ -205,11 +228,15 @@ Alert(GetAlert('success'), 'success');
 <script>
     $('form').validate({
         rules: {
-            media_id: {
-                required: true
-            },
-            id_card: {
+            first_name: {
                 required: true,
+            },
+            last_name: {
+                required: true,
+            },
+            tel: {
+                required: true,
+                number: true,
             },
         },
         messages: {

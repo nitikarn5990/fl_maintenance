@@ -17,7 +17,6 @@
  * @param $className string
  * 
  */
-
 function DiffDays($startDate, $endDate) {
     $date1 = new DateTime($startDate);
     $date2 = new DateTime($endDate);
@@ -25,17 +24,23 @@ function DiffDays($startDate, $endDate) {
     return $date2->diff($date1)->format("%a");
 }
 
-function getAddDays($dateCurrent,$days){
-    $dateReturn =  date('Y-m-d', strtotime($dateCurrent . ' + '.$days.' days'));
-    
+function getAddDays($dateCurrent, $days) {
+    $dateReturn = date('Y-m-d', strtotime($dateCurrent . ' + ' . $days . ' days'));
+
     return $dateReturn;
 }
-
 
 function padLeft($data, $limit, $value) {
     return str_pad($data, $limit, $value, STR_PAD_LEFT);
 }
 
+function ShowDate($myDate) {
+    if ($myDate != "0000-00-00 00:00:00") {
+        $myTimeArray = explode(" ", $myDate);
+
+        return($myTimeArray[0]);
+    }
+}
 
 function ShowDateThTime($myDate) {
     if ($myDate != "0000-00-00 00:00:00") {

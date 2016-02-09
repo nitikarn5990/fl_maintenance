@@ -3,26 +3,16 @@
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ถ้าว่างทำส่วนนี้ คือ เพิม่ลงฐานข้อมูล
     $data = array(
-        "name" => $_POST['name'], //ชื่อสื่อ
-        "category_id" => $_POST['category_id'], //id ประเภทสื่อ
         "detail" => $_POST['detail'], // รายละเอียด
         "qty" => $_POST['qty'], // จำนวน
-        "available" => $_POST['qty'], // จำนวนเหลือที่สามารถให้ยืมหรอจองได้
-        "days_borrow" => $_POST['days_borrow'], //จำนวนวันที่สามาระยืมได้
-        "cost" => $_POST['cost'], // ราคาสื่อ
-        "fine_per_day" => $_POST['fine_per_day'], // ราคาค่าปรับต่อวัน
+        "cost" => $_POST['cost'], // ราคา
         "status" => $_POST['status'], // สถานะ
-        "agent_id" => $_POST['agent_id'], //id ตัวแทนจำหน่าย
         "created_at" => DATE_TIME, //วันที่บันทึก
         "updated_at" => DATE_TIME, //วันที่แก้ไข
     );
 
-// insert ข้อมูลลงในตาราง tb_media โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
-    if (insert("tb_media", $data)) { // บันทึกข้อมูลลงตาราง tb_media 
-        //  echo AlertSuccess;
-        // SetAlert('เพิ่ม แก้ไข ข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        //   header('location:' . ADDRESS . 'media');
-        //  die();
+// insert ข้อมูลลงในตาราง tb_computer โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
+    if (insert("tb_computer", $data)) { // บันทึกข้อมูลลงตาราง tb_computer 
     }
 
     //อัพโหลดภาพ
@@ -35,9 +25,9 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
                 $rootPath = $_SERVER['DOCUMENT_ROOT'];
                 $thisPath = dirname($_SERVER['PHP_SELF']);
                 $onlyPath = str_replace($rootPath, '', $thisPath);
-                
+
                 $targetPath = $rootPath . '/' . $onlyPath . '/dist/images/media/';
-       
+
                 $ext = explode('.', $_FILES['file_array']['name'][$i]);
                 $extension = $ext[count($ext) - 1];
                 $rand = mt_rand(1, 100000);
@@ -54,17 +44,17 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
                     "image" => $newImage, //ชื่อภาพ
                 );
 
-                if (update('tb_media', $data, 'id = ' . getDataDescLastID('id', 'tb_media'))) {
+                if (update('tb_computer', $data, 'id = ' . getDataDescLastID('id', 'tb_computer'))) {
 
                     SetAlert('เพิ่ม แก้ไข ข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-                    header('location:' . ADDRESS . 'media');
+                    header('location:' . ADDRESS . 'computer');
                     die();
                 }
             }
         }
     }
     SetAlert('เพิ่ม แก้ไข ข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-    header('location:' . ADDRESS . 'media');
+    header('location:' . ADDRESS . 'computer');
     die();
 }
 
@@ -76,7 +66,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">เพิ่มข้อมูลสื่อ</h1>
+        <h1 class="page-header">เพิ่มข้อมูลคอมพิวเตอร์</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -84,7 +74,7 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            <a href="<?= ADDRESS ?>media">ข้อมูลสื่อทั้งหมด</a>
+            <a href="<?= ADDRESS ?>computer">ข้อมูลคอมพิวเตอร์ทั้งหมด</a>
             เพิ่มข้อมูล
         </p>
     </div>
@@ -98,40 +88,13 @@ Alert(GetAlert('success'), 'success');
             <div class="panel-body">
                 <div class="row">
                     <div class="col-md-12">
-                        <form role="form" action="<?= ADDRESS ?>media_add" method="POST" enctype="multipart/form-data">
-                            <div class="row da-form-row">
-                                <label class="col-md-2">ชื่อสื่อ <span class="required">*</span></label>
-                                <div class="col-md-10">
-                                    <input class="form-control input-sm" name="name" type="text" value="<?= isset($_POST['name']) ? $_POST['name'] : '' ?>">
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                            <div class="row da-form-row">
-                                <label class="col-md-2">สื่อประเภท <span class="required">*</span></label>
-                                <div class="col-md-10">
+                        <form role="form" action="<?= ADDRESS ?>computer_add" method="POST" enctype="multipart/form-data">
 
-                                    <select class="form-control" name="category_id">
-                                        <option value="">เลือกประเภท</option> 
-<?php
-$sql = "SELECT * FROM tb_category";
-$result = mysql_query($sql);
-$numRow = mysql_num_rows($result);
-if ($numRow > 0) {
-    while ($row = mysql_fetch_assoc($result)) {
-        ?>
-                                                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option> 
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
+                         
                             <div class="row da-form-row">
-                                <label class="col-md-2">รายละเอียด </label>
+                                <label class="col-md-2">รายละเอียด  <span class="required">*</span></label>
                                 <div class="col-md-10">
-                                    <textarea class="form-control" name="detail"><?= isset($_POST['detail']) ? $_POST['detail'] : '' ?></textarea>
+                                    <textarea class="form-control" rows="5" name="detail"><?= isset($_POST['detail']) ? $_POST['detail'] : '' ?></textarea>
                                     <p class="help-block"></p>
                                 </div>
                             </div>
@@ -142,46 +105,11 @@ if ($numRow > 0) {
                                     <p class="help-block"></p>
                                 </div>
                             </div>
-                            <div class="row da-form-row">
-                                <label class="col-md-2">จำนวนวันที่ยืมได้ <span class="required">*</span></label>
-                                <div class="col-md-10">
-                                    <input class="form-control input-sm" name="days_borrow" type="text" value="<?= isset($_POST['days_borrow']) ? $_POST['days_borrow'] : '' ?>">
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
+
                             <div class="row da-form-row">
                                 <label class="col-md-2">ราคา <span class="required">*</span></label>
                                 <div class="col-md-10">
                                     <input class="form-control input-sm" name="cost" type="text" value="<?= isset($_POST['cost']) ? $_POST['cost'] : '' ?>">
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                            <div class="row da-form-row">
-                                <label class="col-md-2">ค่าปรับต่อวัน <span class="required">*</span></label>
-                                <div class="col-md-10">
-                                    <input class="form-control input-sm" name="fine_per_day" type="text" value="<?= isset($_POST['fine_per_day']) ? $_POST['fine_per_day'] : '' ?>">
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                            <div class="row da-form-row">
-                                <label class="col-md-2">ตัวแทนจำหน่าย <span class="required">*</span></label>
-                                <div class="col-md-10">
-
-                                    <select class="form-control" name="agent_id">
-                                        <option value="">เลือกตัวแทนจำหน่าย</option> 
-<?php
-$sql = "SELECT * FROM tb_agent";
-$result = mysql_query($sql);
-$numRow = mysql_num_rows($result);
-if ($numRow > 0) {
-    while ($row = mysql_fetch_assoc($result)) {
-        ?>
-                                                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option> 
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
                                     <p class="help-block"></p>
                                 </div>
                             </div>
@@ -196,10 +124,13 @@ if ($numRow > 0) {
                             </div>
 
                             <div class="row da-form-row">
-                                <label class="col-md-2">สถานะ </label>
+                                <label class="col-md-2">สถานะ <span class="required">*</span></label>
                                 <div class="col-md-10">
-                                    <input class="form-control input-sm" name="status" type="text" value="<?= isset($_POST['status']) ? $_POST['status'] : '' ?>">
-                                    <p class="help-block"></p>
+                                    <select class="form-control" name="status">
+                                        <option value="ปกติ">ปกติ</option> 
+                                        <option value="ส่งซ่อม">ส่งซ่อม</option> 
+
+                                    </select>
                                 </div>
                             </div>
 
@@ -231,31 +162,24 @@ if ($numRow > 0) {
 <script>
     $('form').validate({
         rules: {
+            detail:{
+                 required: true
+            },
             name: {
                 required: true
             },
-            category_id: {
-                required: true,
-            },
+           
             qty: {
                 required: true,
                 number: true
             },
-            days_borrow: {
-                required: true,
-                number: true
-            },
+          
             cost: {
                 required: true,
                 number: true
             },
-            fine_per_day: {
-                required: true,
-                number: true
-            },
-            agent_id: {
-                required: true
-            },
+          
+           
         },
         messages: {
         },
