@@ -1,6 +1,6 @@
 <?php
 
-if ($_SESSION['group'] != 'admin') {
+if ($_SESSION['group'] != 'ผู้ดูแลระบบ') {
     echo "<h1>ไม่พบหน้าที่คุณต้องการ</h1>";
     die();
 }
@@ -74,7 +74,7 @@ Alert(GetAlert('success'), 'success');
                                 </thead>
                                 <tbody>
                                     <?php
-                                    $sql = "SELECT * FROM tb_staff WHERE username != 'admin'";
+                                    $sql = "SELECT * FROM tb_staff WHERE username != 'admin' AND status != 'ผู้ใช้บริการ'";
                                     $result = mysql_query($sql);
 
                                     if (mysql_num_rows($result) > 0) {

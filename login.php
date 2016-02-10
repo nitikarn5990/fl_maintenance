@@ -37,12 +37,8 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
 
 
         if ($row['password'] == $getPass) {
-            if ($username == 'admin') {
-
-                $_SESSION['group'] = 'admin'; //กำหนด session group เพิ่มจะได้รู้ว่า admin หรือ เจ้าหน้าที่
-            } else {
-                $_SESSION['group'] = 'staff'; //กำหนด session group เพิ่มจะได้รู้ว่า admin หรือ เจ้าหน้าที่
-            }
+         
+           $_SESSION['group'] = $row['status'] ;
 
             $_SESSION['user_id'] = $row['id']; //กำหนด session user_id
             $_SESSION['username'] = $username; //กำหนด session username

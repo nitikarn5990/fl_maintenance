@@ -110,15 +110,18 @@ if ($_SESSION ['user_id'] != "") {
 
                     }
                 });
+                if (_ID !== '') {
+                    $.ajax({
+                        method: "GET",
+                        url: "./ajax/get_computer_table.php",
+                        data: {id: _ID.substring(1)}
+                    }).success(function (html) {
 
-                $.ajax({
-                    method: "GET",
-                    url: "./ajax/get_computer_table.php",
-                    data: {id: _ID.substring(1)}
-                }).success(function (html) {
+                        picks2(html, _ID.substring(1));
+                    });
+                }
 
-                    picks2(html, _ID.substring(1));
-                });
+
 
 
             }
@@ -127,7 +130,7 @@ if ($_SESSION ['user_id'] != "") {
     </head>
 
     <body> 
-        <input type="hidden" id="get_computer_id" value="<?=  $_GET['media_id'] != '' ? $_GET['media_id'] : '' ?>">
+        <input type="hidden" id="get_computer_id" value="<?= $_GET['media_id'] != '' ? $_GET['media_id'] : '' ?>">
         <div id="wrapper">
             <div id="" style="padding: 15px;">
                 <div class="row">
@@ -193,20 +196,20 @@ if ($_SESSION ['user_id'] != "") {
                                                             <td class="center" style="width: 20%;"><?= $row['id'] ?></td>
 
                                                             <td class="center" style="width: 30%;"><img src="<?= $targetPath . $row['image'] ?>" style="width: 75px;"></td>
-                                                           
+
 
                                                             <td class="center " style="width: 30%;">
 
-                                                                    <a href="javascript:;" onclick="picks(<?= $row['id'] ?>)" class="btn btn-primary btn-small">เลือก</a> 
-                                                   
+                                                                <a href="javascript:;" onclick="picks(<?= $row['id'] ?>)" class="btn btn-primary btn-small">เลือก</a> 
+
                                                             </td>
                                                         </tr>
 
 
-        <?php
-    }
-}
-?>
+                                                        <?php
+                                                    }
+                                                }
+                                                ?>
 
 
 

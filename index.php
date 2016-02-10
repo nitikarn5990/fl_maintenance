@@ -6,11 +6,11 @@ include_once './lib/application.php';
 if ($_COOKIE['user'] == '') {
     // echo $_REQUEST['URI'];
     if ($_GET['controllers'] != '') {
-        header('location:login.php?controllers=' . $_GET['controllers']);
-        die();
+     //   header('location:login.php?controllers=' . $_GET['controllers']);
+      //  die();
     } else {
-        header('location:login.php');
-        die();
+       // header('location:login.php');
+       // die();
     }
 
 //  die();
@@ -19,7 +19,7 @@ if ($_SESSION ['user_id'] != "") {
 // $users->SetPrimary($_SESSION['admin_id']);
 // $users->GetInfo();
 } else {
-    header('location:login.php');
+   // header('location:login.php');
 }
 ?>
 
@@ -71,11 +71,13 @@ if ($_SESSION ['user_id'] != "") {
 
     <body>
 
-        <div id="wrapper">
+        <div id="wrapper" style="max-width: 1170px;margin: auto;    -webkit-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 2px 0px rgba(0, 0, 0, 0.18);">
 
             <!-- Navigation -->
-            <div>
-                <img src="./dist/images/img_head.png" style="width: 100%;height: 220px;">
+            <div style="">
+                <img src="./dist/images/img_head2.jpg"  class="img-responsive" style="width: 100%;">
             </div>
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
@@ -88,7 +90,7 @@ if ($_SESSION ['user_id'] != "") {
                     <a class="navbar-brand" href="index.html" style="color: #A51800;">
                         <label> 
                             <b> 
-                                ยินดีต้อนรับ :  <?= $_SESSION['group'] == 'admin' ? 'admin' : 'เจ้าหน้าที่ | ' . $_SESSION['name'] ?>  
+                                ยินดีต้อนรับ :  <?= $_SESSION['group'] != '' ? $_SESSION['group']  : 'ผู้ใช้บริการทั่วไป' ?>  
 
                             </b></label>
                     </a>
@@ -97,14 +99,14 @@ if ($_SESSION ['user_id'] != "") {
 
                 <ul class="nav navbar-top-links navbar-right">
                     <li class="dropdown">
-                        <?php if($_SESSION['group'] == 'admin'){?>
+                        <?php if($_SESSION['group'] == 'ผู้ดูแลระบบ'){?>
                            <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit' ?>&action=repassword">
                         <?php }else{?>
                                 <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit&id=' . $_SESSION['user_id'] ?>&action=repassword">
                           <?php }?>       
                             <i class="fa fa-user fa-fw"></i> 
                             <?php
-                            if ($_SESSION['group'] == 'admin') {
+                            if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
                                 echo "เปลี่ยนรหัสผ่าน";
                             } else {
                                 echo "ข้อมูลส่วนตัว";
@@ -177,7 +179,7 @@ if ($_SESSION ['user_id'] != "") {
             $('#dataTables-example thead th').each(function () {
                 var title = $('#dataTables-example thead th').eq($(this).index()).text();
                 if (k === 0) {
-
+                    
                 } else {
                     $(this).html('<input type="text" placeholder="' + title + '" />');
                 }
@@ -186,9 +188,23 @@ if ($_SESSION ['user_id'] != "") {
 
                 k++;
             });
+            var table = $('#dataTables-example').DataTable();
+              $('#dataTables-example2 thead th').each(function () {
+                var title = $('#dataTables-example2 thead th').eq($(this).index()).text();
+                if (k === 0) {
+                      $(this).html('<input type="text" placeholder="' + title + '" />');
+                } else {
+                    $(this).html('<input type="text" placeholder="' + title + '" />');
+                }
+
+
+
+                k++;
+            });
+            var table = $('#dataTables-example2').DataTable();
 
             // DataTable
-            var table = $('#dataTables-example').DataTable();
+            
 
             // Apply the search
             table.columns().eq(0).each(function (colIdx) {

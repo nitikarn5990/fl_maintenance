@@ -8,7 +8,7 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
-            "staff_id" => $_SESSION['staff_id'],
+            "staff_id" => $_SESSION['user_id'],
             // "problem_description" => $_POST['problem_description'],
             "created_at" => DATE_TIME, //
             "updated_at" => DATE_TIME, //

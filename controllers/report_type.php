@@ -4,19 +4,15 @@
         <h1 class="center">รายงาน</h1>
     </div>
     <div class="col-md-12" style="margin-bottom: 10px;">
-        <a href="<?=ADDRESS?>report_borrow" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานจำนวนสื่อที่มีการยืมในแต่ละช่วงเวลา</a>
+        <a href="<?=ADDRESS?>report_repair" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์</a>
 
     </div>
     <div class="col-md-12" style="margin-bottom: 10px;">
-        <a href="<?=ADDRESS?>report_borrow_total_use" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานจำนวนการใช้งานของแต่ละประเภท</a>
+        <a href="<?=ADDRESS?>report_repair2" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสรุปผลการปฏิบัติงาน</a>
 
 
     </div>
-    <div class="col-md-12" style="margin-bottom: 10px;">
-        <a href="<?=ADDRESS?>report_borrow_return" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสรุปการใช้งานยืม/คืน ตามระยะเวลา</a>
-
-
-    </div>
+  
     <!-- /.col-lg-12 -->
 </div>
 <style>

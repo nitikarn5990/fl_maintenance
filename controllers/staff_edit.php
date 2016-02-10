@@ -2,10 +2,13 @@
 <?php
 //เช็คการส่งค่า POST ของฟอร์ม
 //var_dump(strpos('staff', 'staff'));
-
+if ($_SESSION['group'] != 'ผู้ดูแลระบบ') {
+    echo "<h1>ไม่พบหน้าที่คุณต้องการ</h1>";
+    die();
+}
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ทำการอัพเดรต ส่วนแรกคือชื่อฟิลล์ในฐานข้อมูล ส่วนที่สองคือ POST ที่มาจากฟอร์ม (จับคู่ให้ตรงกัน)
-    if ($_SESSION['group'] == 'admin') {
+    if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
@@ -58,7 +61,7 @@ if (isset($_GET['id']) && $_GET['id'] != '' && is_numeric($_GET['id'])) {
         $row = mysql_fetch_assoc($result);
     }
 } else {
-    if ($_SESSION['group'] == 'admin') {
+    if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
 
         $sql = "SELECT * FROM tb_staff WHERE id = " . $_SESSION['user_id'];
         $result = mysql_query($sql);
@@ -81,7 +84,7 @@ Alert(GetAlert('success'), 'success');
         <h1 class="page-header">
 
             <?php
-            if ($_SESSION['group'] == 'admin') {
+            if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
 
                 if ($_GET['action'] == 'repassword') {
                     echo "เปลี่ยนรหัสผ่าน";
@@ -108,7 +111,7 @@ Alert(GetAlert('success'), 'success');
             </p>
         <?php } else { ?>
             <p id="breadcrumb">
-                <?php if ($_SESSION['group'] == 'staff') { ?>
+                <?php if ($_SESSION['group'] == 'เจ้าหน้าที่') { ?>
                     แก้ไขข้อมูลเจ้าหน้าที่
                 <?php } else { ?>
                     <a href="<?= ADDRESS ?>staff">ข้อมูลพนักงานทั้งหมด</a>
@@ -126,7 +129,7 @@ Alert(GetAlert('success'), 'success');
             <div class="panel-heading">
 
                 <?php
-                if ($_SESSION['group'] == 'admin') {
+                if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
                     if ($_GET['action'] == 'repassword') {
                         echo "<i class=icol-key></i> ";
                         echo "เปลี่ยนรหัสผ่าน";
@@ -184,6 +187,8 @@ Alert(GetAlert('success'), 'success');
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
+                            
+                             <?php if ($row['status'] != 'ผู้ดูแลระบบ') { ?>   
                               <div class="row  da-form-row">
                                 <label class="col-md-2">สถานะ <span class="required">*</span></label>
                                 <div class="col-md-10">
@@ -195,8 +200,9 @@ Alert(GetAlert('success'), 'success');
                                     <p class="help-block"></p>
                                 </div>
                             </div>
+                               <?php } ?>
                             <?php } ?>
-                            <?php if ($_SESSION['group'] == 'admin') { ?>          
+                            <?php if ($_SESSION['group'] == 'ผู้ดูแลระบบ') { ?>          
 
                                 <div class="row">
                                     <div class="panel-toolbar" style="padding: 5px 15px 0 15px;">

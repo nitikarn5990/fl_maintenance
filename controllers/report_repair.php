@@ -8,9 +8,9 @@
 //ยกเลิกการยืม
 if ($_GET['action'] == 'cancel' && is_numeric($_GET['id']) && $_GET['id'] != '') {
 
-    if (delete("tb_borrow", "id = " . $_GET['id'])) {
+    if (delete("tb_repair", "id = " . $_GET['id'])) {
         SetAlert('ลบการยืมสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'borrow');
+        header('location:' . ADDRESS . 'repair');
         die();
     }
 }
@@ -18,9 +18,9 @@ if ($_GET['action'] == 'cancel' && is_numeric($_GET['id']) && $_GET['id'] != '')
 if (isset($_POST['select_all'])) {
     $all_id = implode(',', $_POST['select_all']);
 
-    if (delete("tb_borrow", "id in(" . $all_id . ")")) {
+    if (delete("tb_repair", "id in(" . $all_id . ")")) {
         SetAlert('ลบการยืมสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'borrow');
+        header('location:' . ADDRESS . 'repair');
         die();
     }
 }
@@ -33,7 +33,7 @@ Alert(GetAlert('success'), 'success');
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">รายงานการยืมสื่อทัศนวัสดุตามช่วงเวลา</h1>
+        <h1 class="page-header">รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -41,42 +41,42 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-              <a href="<?=ADDRESS?>report_type">รายงาน</a>
-            รายงานการยืมสื่อทัศนวัสดุตามช่วงเวลา
+            <a href="<?= ADDRESS ?>report_type">รายงาน</a>
+            รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์ตามช่วงเวลา
         </p>
     </div>
 </div>
-<form method="POST" action="<?=ADDRESS?>report_borrow">
-<div class="row">
-    <div class="">
-    <label class="col-md-1">ค้นหาตามวันที่ <span class="required">*</span></label>
-    <div class="col-md-3">
-        <input type="text" class="form-control " id="st_date" name="st_date" value="<?=isset($_POST['st_date']) ? $_POST['st_date'] : '' ?>" readonly="" required="">
-    </div>
-    <div class="col-md-1 center">ถึง</div>
-     <div class="col-md-3">
-         <input type="text" class="form-control " id="ed_date" name="ed_date" readonly="" value="<?=isset($_POST['ed_date']) ? $_POST['ed_date'] : '' ?>" required="">
-    </div>
-    <div class="col-md-3">
-        <p><button type="submit" value="ค้นหา" name="btn_submit" class="form-control btn btn-primary f-12">ค้นหา</button></p>
-        <p><a href="<?=ADDRESS?>report_borrow" type="button" class="form-control btn btn-danger f-12">ยกเลิก</a></p>
-    </div>
-    </div>
+<form method="POST" action="<?= ADDRESS ?>report_repair">
+    <div class="row">
+        <div class="">
+            <label class="col-md-1">ค้นหาตามวันที่ <span class="required">*</span></label>
+            <div class="col-md-3">
+                <input type="text" class="form-control " id="st_date" name="st_date" value="<?= isset($_POST['st_date']) ? $_POST['st_date'] : '' ?>" readonly="" required="">
+            </div>
+            <div class="col-md-1 center">ถึง</div>
+            <div class="col-md-3">
+                <input type="text" class="form-control " id="ed_date" name="ed_date" readonly="" value="<?= isset($_POST['ed_date']) ? $_POST['ed_date'] : '' ?>" required="">
+            </div>
+            <div class="col-md-3">
+                <p><button type="submit" value="ค้นหา" name="btn_submit" class="form-control btn btn-primary f-12">ค้นหา</button></p>
+                <p><a href="<?= ADDRESS ?>report_repair" type="button" class="form-control btn btn-danger f-12">ยกเลิก</a></p>
+            </div>
+        </div>
 
-</div>
+    </div>
 </form>
 
-<form action="" method="POST" id="frm_borrow">
+<form action="" method="POST" id="frm_repair">
 
     <div class="row">
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    การยืมสื่อทัศนวัสดุ
+                    การแจ้งซ่อมคอมพิวเตอร์
                 </div>
                 <div class="panel-toolbar hidden">
                     <div class="btn-group"> 
-                        <a class="btn" href="<?= ADDRESS ?>borrow_add"><i class="icol-add"></i> เพิ่มการยืม</a> 
+                        <a class="btn" href="<?= ADDRESS ?>repair_add"><i class="icol-add"></i> เพิ่มการยืม</a> 
 
                         <a href="javascript:;" onclick="frm_submit()" class="btn" id="btn-select-delete" ><i class="icol-cross"></i> ลบที่เลือก</a> 
                     </div>
@@ -85,55 +85,57 @@ Alert(GetAlert('success'), 'success');
                 <div class="panel-body" style="padding-top: 15px;">
                     <div class="table-responsive">
                         <div class="dataTable_wrapper">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
                                 <thead>
                                     <tr>
-                                        
-                                        <th class="center">รหัสหนังสือ</th>
-                                        <th class="center">ประเภท</th>
-                                        <th class="center">ชื่อสื่อ</th>
-                                        <th class="center">วันที่ยืม</th>
+
+                                        <th class="center">รหัสการแจ้ง</th>
+                                        <th class="center">รหัสคอมพิวเตอร์</th>
+                                        <th class="center">ภาพ</th>
+                                        <th class="center">ปัญหา</th>
+                                        <th class="center hidden">สถานะ</th>
+                                        <th class="center">วันที่แจ้ง</th>
 
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php
                                     if ($_POST['st_date'] != '' && $_POST['ed_date'] != '') {
-                                        $sql = "SELECT * FROM tb_borrow_list WHERE borrow_date between '".$_POST['st_date'] . " 00:00:00' and '".$_POST['ed_date'] ." 00:00:00'  ORDER BY media_id DESC";
-                                       
-                                     }else{
-                                         $sql = "SELECT * FROM tb_borrow_list ORDER BY media_id DESC";
+                                        $sql = "SELECT * FROM tb_repair_list WHERE date_input between '" . $_POST['st_date'] . " 00:00:00' and '" . $_POST['ed_date'] . " 23:59:59'  ORDER BY date_input DESC";
+                                    } else {
+                                        $sql = "SELECT * FROM tb_repair_list ORDER BY date_input DESC";
                                     }
-                                    
+
                                     $result = mysql_query($sql);
 
                                     if (mysql_num_rows($result) > 0) {
                                         while ($row = mysql_fetch_assoc($result)) {
                                             $classStatus = '';
-                                            
-                                            $catID = getDataDesc('category_id', 'tb_media', 'id = ' . $row['media_id']) ;
-                                            
+
+                                            $image = getDataDesc('image', 'tb_computer', 'id = ' . $row['computer_id']);
                                             ?>
                                             <tr class="<?= $classStatus ?>" >
-                                
-                                                <td class="center"><?= $row['media_id'] ?></td>
-                                                <td class="center"><?= getDataDesc('name', 'tb_category', 'id = ' . $catID)  ?></td> 
-                                                <td class="center"><?= getDataDesc('name', 'tb_media', 'id = ' . $row['media_id']) ?></td> 
-                                                <td class="center"> <?= $row['borrow_date'] ?></td>
-                                   
+
+                                                <td class="center"><?= $row['repair_id'] ?></td>
+                                                <td class="center"><?= $row['computer_id'] ?></td> 
+                                                <td class="center"> <img src="./dist/images/media/<?= $image ?>" style="width: 75px;"></td> 
+                                                <td class="center"> <?= $row['problem_description'] ?></td>
+                                                <td class="center hidden"> <?= $row['status'] ?></td>
+                                                <td class="center"> <?= ShowDate($row['date_input']) ?></td>
+
                                                 </td>
 
                                             </tr>
 
 
-                                            <?php
-                                        }
-                                    }
-                                    ?>
+        <?php
+    }
+}
+?>
 
                                 </tbody>
                             </table>
-                           
+
                         </div>
                     </div>
 
@@ -149,7 +151,7 @@ Alert(GetAlert('success'), 'success');
 <script>
     function frm_submit() {
         if (confirm("คุณแน่ใจที่จะลบการยืม?")) {
-            $("#frm_borrow").submit();
+            $("#frm_repair").submit();
         }
 
 
