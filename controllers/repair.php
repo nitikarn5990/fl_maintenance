@@ -4,7 +4,7 @@ if ($_GET['action'] == 'del' && is_numeric($_GET['id']) && $_GET['id'] != '') {
 
     if (delete("tb_repair", "id = " . $_GET['id'])) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'computer');
+        header('location:' . ADDRESS . 'repair');
         die();
     }
 }
@@ -13,7 +13,7 @@ if (isset($_POST['select_all'])) {
     $all_id = implode(',', $_POST['select_all']);
     if (delete("tb_repair", "id in(" . $all_id . ")")) {
         SetAlert('ลบข้อมูลสำเร็จ', 'success'); //แสดงข้อมูลแจ้งเตือนถ้าสำเร็จ
-        header('location:' . ADDRESS . 'computer');
+        header('location:' . ADDRESS . 'repair');
         die();
     }
 }

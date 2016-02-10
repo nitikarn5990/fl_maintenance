@@ -61,7 +61,7 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
                    die();
             }
 
-            header('location:' . ADDRESS . "staff"); //ให้ไปสู่หน้า staff
+            header('location:' . ADDRESS . "repair"); //ให้ไปสู่หน้า repair
             die();
         } else {
             SetAlert('ชื่อผู้ใช้ กับรหัสผ่านไม่ตรงกัน กรุณาลองใหม่อีกครั้ง');

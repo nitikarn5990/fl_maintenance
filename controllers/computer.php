@@ -60,6 +60,7 @@ Alert(GetAlert('success'), 'success');
                                     <tr>
                                         <th class="center"></th>
                                         <th>รหัสคอมพิวเตอร์</th>
+                                         <th>ประเภท</th>
                                         <th>ภาพ</th>
                                         <th>จำนวน</th>
                                         <th>ราคา</th>
@@ -81,6 +82,7 @@ Alert(GetAlert('success'), 'success');
                                             <tr class="">
                                                 <td class="center"> <input type="checkbox" name="select_all[]" class="checkboxes" value="<?= $row['id'] ?>" onclick="countSelect()"></td>
                                                 <td class="center"><?= $row['id']?></td>
+                                                <td class="center"><?= getDataDesc('name', 'tb_category', 'id='.$row['category_id'])?></td>
                                                 <td><img src="<?= $targetPath.$row['image'] ?>" style="width: 75px;"></td>
                                                 <td class="center"><?= $row['qty'] ?></td>
                                                 <td class="center"><?= $row['cost'] ?></td>

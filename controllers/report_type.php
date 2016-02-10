@@ -4,15 +4,25 @@
         <h1 class="center">รายงาน</h1>
     </div>
     <div class="col-md-12" style="margin-bottom: 10px;">
-        <a href="<?=ADDRESS?>report_repair" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์</a>
+        <a href="<?= ADDRESS ?>report_repair" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์</a>
 
     </div>
     <div class="col-md-12" style="margin-bottom: 10px;">
-        <a href="<?=ADDRESS?>report_repair2" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานสรุปผลการปฏิบัติงาน</a>
+        <a href="<?= ADDRESS ?>report_repair2" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">
 
-
+            <?php
+            if ($_SESSION['group'] == 'ผู้บริหาร' || $_SESSION['group'] == 'ผู้ดูแลระบบ') {
+                echo "รายงานสรุปผลการปฏิบัติงาน";
+            } else {
+                echo "รายงานสรุปผลการปฏิบัติงานของตนเอง";
+            }
+            ?>
+        </a>
     </div>
-  
+    <div class="col-md-12" style="margin-bottom: 10px;">
+        <a href="<?= ADDRESS ?>report_repair3" class="btn btn-default " style="width: 100%;padding: 20px;font-size: 20px;">รายงานคอมพิวเตอร์ที่มีการซ่อม</a>
+    </div>
+
     <!-- /.col-lg-12 -->
 </div>
 <style>

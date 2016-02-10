@@ -6,7 +6,7 @@
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ทำการอัพเดรต ส่วนแรกคือชื่อฟิลล์ในฐานข้อมูล ส่วนที่สองคือ POST ที่มาจากฟอร์ม (จับคู่ให้ตรงกัน)
     $data = array(
-       
+        "category_id" => $_POST['category_id'], // ประเภทอุปกรณ์
         "detail" => $_POST['detail'], // รายละเอียด
         "qty" => $_POST['qty'], // จำนวน
         "cost" => $_POST['cost'], // ราคา
@@ -65,6 +65,7 @@ if (isset($_GET['id']) && $_GET['id'] != '' && is_numeric($_GET['id'])) {
     if ($num_row == 1) {
         $row = mysql_fetch_assoc($result);
     }
+   
 }
 ?>
 <?php
@@ -105,7 +106,28 @@ Alert(GetAlert('success'), 'success');
                 <div class="row">
                     <div class="col-md-12">
                         <form role="form" action="<?= ADDRESS ?>computer_edit&id=<?= $_GET['id'] ?>" method="POST" enctype="multipart/form-data">
+                            <div class="row da-form-row">
+                                <label class="col-md-2">ประเภทอุปกรณ์ <span class="required">*</span></label>
+                                <div class="col-md-10">
 
+                                    <select class="form-control" name="category_id">
+                                        <option value="">เลือกประเภท</option> 
+                                        <?php
+                                        $sql = "SELECT * FROM tb_category";
+                                        $result = mysql_query($sql);
+                                        $numRow = mysql_num_rows($result);
+                                        if ($numRow > 0) {
+                                            while ($row2 = mysql_fetch_assoc($result)) {
+                                                ?>
+                                                <option value="<?= $row2['id'] ?>" <?= $row['category_id'] == $row2['id'] ? 'selected' :'' ?>><?= $row2['name'] ?></option> 
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
                             <div class="row da-form-row">
                                 <label class="col-md-2">รายละเอียด <span class="required">*</span></label>
                                 <div class="col-md-10">

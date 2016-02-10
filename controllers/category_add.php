@@ -29,7 +29,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">เพิ่มข้อมูลประเภทสื่อ</h1>
+        <h1 class="page-header">เพิ่มข้อมูลประเภทคอมพิวเตอร์</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -37,7 +37,7 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            <a href="<?= ADDRESS ?>category">ข้อมูลประเภทสื่อทั้งหมด</a>
+            <a href="<?= ADDRESS ?>category">ข้อมูลประเภทคอมพิวเตอร์ทั้งหมด</a>
             เพิ่มข้อมูล
         </p>
     </div>
@@ -53,7 +53,7 @@ Alert(GetAlert('success'), 'success');
                     <div class="col-md-12">
                         <form role="form" action="<?= ADDRESS ?>category_add" method="POST">
                             <div class="row da-form-row">
-                                <label class="col-md-2">ชื่อประเภทสื่อ <span class="required">*</span></label>
+                                <label class="col-md-2">ชื่อประเภทคอมพิวเตอร์ <span class="required">*</span></label>
                                 <div class="col-md-10">
                                     <input class="form-control input-sm" name="name" type="text" value="<?= isset($_POST['name']) ? $_POST['name'] : '' ?>">
                                     <p class="help-block"></p>

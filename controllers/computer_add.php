@@ -3,6 +3,7 @@
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ถ้าว่างทำส่วนนี้ คือ เพิม่ลงฐานข้อมูล
     $data = array(
+        "category_id" => $_POST['category_id'], // ประเภทอุปกรณ์
         "detail" => $_POST['detail'], // รายละเอียด
         "qty" => $_POST['qty'], // จำนวน
         "cost" => $_POST['cost'], // ราคา
@@ -90,7 +91,28 @@ Alert(GetAlert('success'), 'success');
                     <div class="col-md-12">
                         <form role="form" action="<?= ADDRESS ?>computer_add" method="POST" enctype="multipart/form-data">
 
-                         
+                            <div class="row da-form-row">
+                                <label class="col-md-2">ประเภทอุปกรณ์ <span class="required">*</span></label>
+                                <div class="col-md-10">
+
+                                    <select class="form-control" name="category_id">
+                                        <option value="">เลือกประเภท</option> 
+                                        <?php
+                                        $sql = "SELECT * FROM tb_category";
+                                        $result = mysql_query($sql);
+                                        $numRow = mysql_num_rows($result);
+                                        if ($numRow > 0) {
+                                            while ($row = mysql_fetch_assoc($result)) {
+                                                ?>
+                                                <option value="<?= $row['id'] ?>"><?= $row['name'] ?></option> 
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                    <p class="help-block"></p>
+                                </div>
+                            </div>
                             <div class="row da-form-row">
                                 <label class="col-md-2">รายละเอียด  <span class="required">*</span></label>
                                 <div class="col-md-10">
@@ -162,24 +184,23 @@ Alert(GetAlert('success'), 'success');
 <script>
     $('form').validate({
         rules: {
-            detail:{
-                 required: true
+            category_id: {
+                required: true
+            },
+            detail: {
+                required: true
             },
             name: {
                 required: true
             },
-           
             qty: {
                 required: true,
                 number: true
             },
-          
             cost: {
                 required: true,
                 number: true
             },
-          
-           
         },
         messages: {
         },

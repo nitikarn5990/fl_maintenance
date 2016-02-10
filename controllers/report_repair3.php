@@ -33,7 +33,7 @@ Alert(GetAlert('success'), 'success');
 
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์</h1>
+        <h1 class="page-header">รายงานคอมพิวเตอร์ที่มีการซ่อม</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -42,7 +42,7 @@ Alert(GetAlert('success'), 'success');
     <div class="col-lg-12">
         <p id="breadcrumb">
             <a href="<?= ADDRESS ?>report_type">รายงาน</a>
-            รายงานสถิติการแจ้งซ่อมคอมพิวเตอร์ตามช่วงเวลา
+            รายงานคอมพิวเตอร์ที่มีการซ่อม
         </p>
     </div>
 </div>
@@ -51,7 +51,7 @@ Alert(GetAlert('success'), 'success');
         <div class="">
             <div class="col-md-9">
                 <div class="row"  style="margin-bottom: 15px;">
-                    <label class="col-md-2">ช่วงเวลา <span class="required"></span></label>
+                    <label class="col-md-2">วันที่แจ้ง <span class="required"></span></label>
                     <div class="col-md-4">
                         <input type="text" class="form-control " id="st_date" name="st_date" value="<?= isset($_POST['st_date']) ? $_POST['st_date'] : '' ?>" readonly="" required="">
                     </div>
@@ -120,7 +120,7 @@ Alert(GetAlert('success'), 'success');
                                         <th class="center">รหัสคอมพิวเตอร์</th>
                                         <th class="center">ภาพ</th>
                                         <th class="center">ปัญหา</th>
-                                        <th class="center hidden">สถานะ</th>
+                                        <th class="center ">สถานะ</th>
                                         <th class="center">วันที่แจ้ง</th>
 
                                     </tr>
@@ -133,27 +133,28 @@ Alert(GetAlert('success'), 'success');
                                         $sql_category_2 = " WHERE category_id = '" . $_POST['category_id'] . "' ";
                                     } else {
                                         $sql_category = "";
+                                        $sql_category_2 = "";
                                     }
 
                                     if ($_POST['st_date'] != '' && $_POST['ed_date'] != '') {
                                         // $sql = "SELECT * FROM tb_repair_list WHERE date_input between '" . $_POST['st_date'] . " 00:00:00' and '" . $_POST['ed_date'] . " 23:59:59'  ORDER BY date_input DESC";
                                         $sql = "SELECT a.*,b.category_id FROM " .
-                                                "(SELECT * FROM tb_repair_list)a " .
+                                                "(SELECT * FROM tb_repair_list WHERE status != 'ซ่อมแล้ว')a " .
                                                 "LEFT JOIN " .
                                                 "(SELECT * FROM tb_computer)b " .
                                                 "ON a.computer_id = b.id " .
                                                 " WHERE date_input between '" . $_POST['st_date'] . " 00:00:00' and '" . $_POST['ed_date'] . " 23:59:59' " . $sql_category . " ORDER BY date_input DESC";
                                     } else {
-                                        $sql = "SELECT a.*,b.category_id FROM ".
-                                        "(SELECT * FROM tb_repair_list)a ".
-                                        "LEFT JOIN ".
-                                        "(SELECT * FROM tb_computer)b ".
-                                        "ON a.computer_id = b.id ".
-                                        " $sql_category_2 ".       
-                                        "ORDER BY date_input DESC";
+                                        $sql = "SELECT a.*,b.category_id FROM " .
+                                                "(SELECT * FROM tb_repair_list WHERE status != 'ซ่อมแล้ว')a " .
+                                                "LEFT JOIN " .
+                                                "(SELECT * FROM tb_computer)b " .
+                                                "ON a.computer_id = b.id " .
+                                                " $sql_category_2 " .
+                                                "ORDER BY date_input DESC";
                                     }
 
-                                   // echo $sql;
+                                    //  echo $sql;
 
                                     $result = mysql_query($sql);
 
@@ -166,11 +167,11 @@ Alert(GetAlert('success'), 'success');
                                             <tr class="<?= $classStatus ?>" >
 
                                                 <td class="center"><?= $row['repair_id'] ?></td>
-                                                  <td class="center"><?= getDataDesc('name', 'tb_category', 'id = ' . $row['category_id']) ?></td> 
+                                                <td class="center"><?= getDataDesc('name', 'tb_category', 'id = ' . $row['category_id']) ?></td> 
                                                 <td class="center"><?= $row['computer_id'] ?></td> 
                                                 <td class="center"> <img src="./dist/images/media/<?= $image ?>" style="width: 75px;"></td> 
                                                 <td class="center"> <?= $row['problem_description'] ?></td>
-                                                <td class="center hidden"> <?= $row['status'] ?></td>
+                                                <td class="center "> <?= $row['status'] ?></td>
                                                 <td class="center"> <?= ShowDate($row['date_input']) ?></td>
 
                                                 </td>

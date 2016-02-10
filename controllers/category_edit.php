@@ -46,7 +46,7 @@ Alert(GetAlert('success'), 'success');
     <div class="col-lg-12">
         <h1 class="page-header">
 
-            แก้ไขชื่อประเภทสื่อ
+            แก้ไขชื่อประเภทคอมพิวเตอร์
 
         </h1>
 
@@ -56,7 +56,7 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            <a href="<?= ADDRESS ?>category">ข้อมูลประเภทสื่อทั้งหมด</a>
+            <a href="<?= ADDRESS ?>category">ข้อมูลประเภทคอมพิวเตอร์ทั้งหมด</a>
             แก้ไขข้อมูล
         </p>
 

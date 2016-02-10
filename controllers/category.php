@@ -25,7 +25,7 @@ Alert(GetAlert('success'), 'success');
 ?>
 <div class="row">
     <div class="col-lg-12">
-        <h1 class="page-header">จัดการประเภทสื่อทัศนวัสดุ</h1>
+        <h1 class="page-header">จัดการประเภทคอมพิวเตอร์</h1>
 
     </div>
     <!-- /.col-lg-12 -->
@@ -33,7 +33,7 @@ Alert(GetAlert('success'), 'success');
 <div class="row">
     <div class="col-lg-12">
         <p id="breadcrumb">
-            จัดการประเภทสื่อทัศนวัสดุ
+            จัดการประเภทคอมพิวเตอร์
         </p>
     </div>
 </div>
@@ -42,7 +42,7 @@ Alert(GetAlert('success'), 'success');
         <div class="col-lg-12">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    ประเภทสื่อทัศนวัสดุ
+                    ประเภทคอมพิวเตอร์
                 </div>
                 <div class="panel-toolbar">
                     <div class="btn-group"> 
@@ -75,8 +75,8 @@ Alert(GetAlert('success'), 'success');
                                             ?>
                                             <tr class="">
                                                 <td class="center"> <input type="checkbox" name="select_all[]" class="checkboxes" value="<?= $row['id'] ?>" onclick="countSelect()"></td>
-                                                <td class="center"><?= padLeft($row['id'] , 3, '0') ?></td>
-                                                <td><?= $row['name'] ?></td>
+                                                <td class="center"><?= $row['id'] ?></td>
+                                                <td class="center"><?= $row['name'] ?></td>
                                                 <td class="center"><?= ShowDateThTime($row['updated_at']) ?></td>
                                                 <td class="center "><a href="<?= ADDRESS ?>category_edit&id=<?= $row['id'] ?>" class="btn btn-primary btn-small">แก้ไข / ดู</a> <a href="javascript:;" onclick="if (confirm('คุณต้องการลบข้อมูลนี้หรือใม่?') == true) {
                                                                     document.location.href = '<?= ADDRESS ?>category&id=<?= $row['id'] ?>&action=del'

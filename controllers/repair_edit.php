@@ -6,16 +6,31 @@
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ทำการอัพเดรต ส่วนแรกคือชื่อฟิลล์ในฐานข้อมูล ส่วนที่สองคือ POST ที่มาจากฟอร์ม (จับคู่ให้ตรงกัน)
     $data = array(
-    
         "comment" => $_POST['comment'], // จำนวน
         "status" => $_POST['status'], // สถานะ
         "updated_at" => DATE_TIME, //วันที่แก้ไข
         "date_success" => DATE_TIME, //วันที่แก้ไข
     );
-    
- 
+
+
 // update ข้อมูลลงในตาราง tb_repair_list โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
-    if (update("tb_repair_list", $data, "repair_id = " . $_GET['id'] . " AND computer_id = ".$_POST['computer_id'])) { //ชื่อตาราง,ข้อมูลจากตัวแปร $data,id ที่จะทำการแก้ไข
+    if (update("tb_repair_list", $data, "repair_id = " . $_GET['id'] . " AND computer_id = " . $_POST['computer_id'])) { //ชื่อตาราง,ข้อมูลจากตัวแปร $data,id ที่จะทำการแก้ไข
+        if ($_POST['status'] == 'ซ่อมแล้ว') {
+            $computer_status = 'ปกติ';
+        } else if ($_POST['status'] == 'แทงจำหน่าย') {
+            $computer_status = 'แทงจำหน่าย';
+        } else {
+            $computer_status = 'ส่งซ่อม';
+        }
+
+        $data2 = array(
+
+        "status" => $computer_status, // สถานะ computer
+        "updated_at" => DATE_TIME, //วันที่แก้ไข
+
+        );
+        
+        update('tb_computer', $data2, 'id = '.$_POST['computer_id']);
     }
     //อัพโหลดภาพ
     if (isset($_FILES['file_array'])) {
@@ -114,11 +129,11 @@ Alert(GetAlert('success'), 'success');
                         <div class="row da-form-row">
                             <label class="col-md-2">ชื่อผู้แจ้งซ่อม <span class="required">*</span></label>
                             <div class="col-md-10">
-                                <input class="form-control input-sm" name="first_name" type="text" value="<?= getDataDesc('first_name', 'tb_repair', 'id=' . $_GET['id'])  ?>">
+                                <input class="form-control input-sm" name="first_name" type="text" value="<?= getDataDesc('first_name', 'tb_repair', 'id=' . $_GET['id']) ?>">
                                 <p class="help-block"></p>
                             </div>
                         </div>
-                         <div class="row da-form-row">
+                        <div class="row da-form-row">
                             <label class="col-md-2">นามสกุลผู้แจ้งซ่อม <span class="required">*</span></label>
                             <div class="col-md-10">
                                 <input class="form-control input-sm" name="last_name" type="text" value="<?= getDataDesc('last_name', 'tb_repair', 'id=' . $_GET['id']) ?>">
@@ -159,7 +174,7 @@ Alert(GetAlert('success'), 'success');
 </div>
 <div class="row">
     <?php
-    $sql = "SELECT * FROM tb_repair_list WHERE repair_id = ".$_GET['id'];
+    $sql = "SELECT * FROM tb_repair_list WHERE repair_id = " . $_GET['id'];
     $result = mysql_query($sql);
 
     $targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/';
@@ -238,10 +253,10 @@ Alert(GetAlert('success'), 'success');
                                                     </p>
                                                 </div>
                                             </div>
-                                              <div class="row da-form-row">
+                                            <div class="row da-form-row">
                                                 <label class="col-md-2">หมายเหตุ <span class="required"></span></label>
                                                 <div class="col-md-10">
-                                                    <textarea class="form-control" rows="5" name="comment" ><?=$row['comment'] ?></textarea>
+                                                    <textarea class="form-control" rows="5" name="comment" ><?= $row['comment'] ?></textarea>
                                                     <p class="help-block"></p>
                                                 </div>
                                             </div>
@@ -282,11 +297,9 @@ Alert(GetAlert('success'), 'success');
 <script>
     $('form2').validate({
         rules: {
-          
             status: {
                 required: true,
             },
-          
         },
         messages: {
             status: {
