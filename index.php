@@ -79,6 +79,19 @@ if ($_SESSION ['user_id'] != "") {
             <div style="">
                 <img src="./dist/images/img_head2.jpg"  class="img-responsive" style="width: 100%;">
             </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <?php
+// Report errors to the user
+
+                        Alert(GetAlert('error'));
+
+                        Alert(GetAlert('success'), 'success');
+                        ?>
+                    </div>
+                </div>
+            </div>
             <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -96,38 +109,90 @@ if ($_SESSION ['user_id'] != "") {
                     </a>
                 </div>
                 <!-- /.navbar-header -->
+                <?php if ($_SESSION['group'] != '') { ?>
+                    <ul class="nav navbar-top-links navbar-right">
+                        <li class="dropdown">
+                            <?php if ($_SESSION['group'] == 'ผู้ดูแลระบบ') { ?>
+                                <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit' ?>&action=repassword">
+                                <?php } else { ?>
+                                    <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit&id=' . $_SESSION['user_id'] ?>&action=repassword">
+                                    <?php } ?>       
+                                    <i class="fa fa-user fa-fw"></i> 
+                                    <?php
+                                    if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
+                                        echo "เปลี่ยนรหัสผ่าน";
+                                    } else {
+                                        echo "ข้อมูลส่วนตัว";
+                                    }
+                                    ?>
 
-                <ul class="nav navbar-top-links navbar-right">
-                    <li class="dropdown">
-                        <?php if ($_SESSION['group'] == 'ผู้ดูแลระบบ') { ?>
-                            <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit' ?>&action=repassword">
-                            <?php } else { ?>
-                                <a class="dropdown-toggle"  href="<?= ADDRESS . 'staff_edit&id=' . $_SESSION['user_id'] ?>&action=repassword">
-                                <?php } ?>       
-                                <i class="fa fa-user fa-fw"></i> 
-                                <?php
-                                if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
-                                    echo "เปลี่ยนรหัสผ่าน";
-                                } else {
-                                    echo "ข้อมูลส่วนตัว";
-                                }
-                                ?>
+                                </a>
+
+                                <!-- /.dropdown-messages -->
+                        </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle"  href="<?= ADDRESS ?>logout&page=<?= $_GET['controllers'] ?>">
+                                <i class="fa fa-power-off fa-fw" style="color: #DC4429;"></i> ออกจากระบบ
 
                             </a>
 
                             <!-- /.dropdown-messages -->
-                    </li>
-                    <li class="dropdown">
-                        <a class="dropdown-toggle"  href="<?= ADDRESS ?>logout&page=<?= $_GET['controllers'] ?>">
-                            <i class="fa fa-power-off fa-fw" style="color: #DC4429;"></i> ออกจากระบบ
+                        </li>
 
-                        </a>
+                        <!-- /.dropdown -->
+                    </ul>
+                <?php } else { ?>
+                    <ul class="nav navbar-top-links navbar-right hidden">
 
-                        <!-- /.dropdown-messages -->
-                    </li>
+                        <li class="dropdown">
+                            <a class="dropdown-toggle"  href="<?= ADDRESS ?>logout&page=<?= $_GET['controllers'] ?>">
+                                <i class="fa fa-lock" style=""></i> เข้าสู่ระบบ
 
-                    <!-- /.dropdown -->
-                </ul>
+                            </a>
+
+                            <!-- /.dropdown-messages -->
+                        </li>
+
+                        <!-- /.dropdown -->
+                    </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+
+                        <li class="dropdown">
+                            <a href="javascript:;" class="dropdown-toggle" data-toggle="dropdown">    <i class="fa fa-lock" style=""></i> เข้าสู่ระบบ <b class="caret"></b></a>
+                            <ul class="dropdown-menu" style="padding: 15px;min-width: 250px;">
+                                <form class="form"  method="post" action="login.php" accept-charset="UTF-8" id="">
+                                    <li>
+                                        <div class="row">
+                                            <div class="col-md-12">
+
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="exampleInputEmail2">Username</label>
+                                                    <input type="text" name="username" class="form-control" id="exampleInputEmail2" placeholder="username" required>
+                                                </div>
+                                                <div class="form-group">
+                                                    <label class="sr-only" for="exampleInputPassword2">Password</label>
+                                                    <input type="password" name="password" class="form-control" id="exampleInputPassword2" placeholder="password" required>
+                                                </div>
+
+
+
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <button class="btn btn-primary btn-block" type="submit" id="sign-in-google" name="submit_bt" value="เข้าสู่ระบบ"><i class="fa fa-lock"></i>&nbsp;เข้าสู่ระบบ</button>
+                                        <a href="<?= ADDRESS ?>logout" class="btn btn-danger btn-block" id="sign-in-twitter" > <i class="fa fa-power-off"></i>&nbsp;ออกจากระบบ</a>
+                                    </li>
+                                </form>
+                            </ul>
+                        </li>
+
+
+                    </ul>
+
+                <?php } ?>
                 <!-- /.navbar-top-links -->
 
                 <?php require './include/sidebar.php'; ?>
@@ -241,18 +306,18 @@ if ($_SESSION ['user_id'] != "") {
                 background-color: #FFFAD0;
             }
 
-            #page-wrapper {
-                position: inherit;
-                margin: 0px 0 0 200px;
-                padding: 0 30px;
-                border-left: 1px solid #e7e7e7;
-            }
-            .sidebar {
-                z-index: 1;
-                position: absolute;
-                width: 200px;
-                margin-top: 51px;
-            }
+            /*            #page-wrapper {
+                            position: inherit;
+                            margin: 0px 0 0 200px;
+                            padding: 0 30px;
+                            border-left: 1px solid #e7e7e7;
+                        }
+                        .sidebar {
+                            z-index: 1;
+                            position: absolute;
+                            width: 200px;
+                            margin-top: 51px;
+                        }*/
         </style>
     </body>
 

@@ -1,9 +1,20 @@
+<?php if ($_SESSION['group'] == '') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
+<?php
+
+}else{ ?>
 <!-- Latest compiled and minified CSS -->
 <link href="./plugins/datepicker/jquery.datepick.css" rel="stylesheet">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="./plugins/datepicker/jquery.plugin.js"></script>
 <script src="./plugins/datepicker/jquery.datepick.js"></script>
 <script src="./plugins/datepicker/jquery.datepick-th.js"></script>
+
 <?php
 //ยกเลิกการยืม
 if ($_GET['action'] == 'cancel' && is_numeric($_GET['id']) && $_GET['id'] != '') {
@@ -257,3 +268,5 @@ Alert(GetAlert('success'), 'success');
         font-size: 12px;
     }
 </style>
+
+<?php }?>

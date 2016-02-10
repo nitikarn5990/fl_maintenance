@@ -1,9 +1,21 @@
+<?php if ($_SESSION['group'] == '') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
+<?php
+
+}else{ ?>
 <!-- Latest compiled and minified CSS -->
 <link href="./plugins/datepicker/jquery.datepick.css" rel="stylesheet">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="./plugins/datepicker/jquery.plugin.js"></script>
 <script src="./plugins/datepicker/jquery.datepick.js"></script>
 <script src="./plugins/datepicker/jquery.datepick-th.js"></script>
+
+
 <?php
 //ยกเลิกการยืม
 if ($_GET['action'] == 'cancel' && is_numeric($_GET['id']) && $_GET['id'] != '') {
@@ -171,7 +183,7 @@ Alert(GetAlert('success'), 'success');
                                                 <td class="center"><?= $row['computer_id'] ?></td> 
                                                 <td class="center"> <img src="./dist/images/media/<?= $image ?>" style="width: 75px;"></td> 
                                                 <td class="center"> <?= $row['problem_description'] ?></td>
-                                                <td class="center "> <?= $row['status'] ?></td>
+                                                <td class="center "> <?= $row['status'] == '' ? 'อยู่ระหว่างดำเนินการ' : $row['status'] ?></td>
                                                 <td class="center"> <?= ShowDate($row['date_input']) ?></td>
 
                                                 </td>
@@ -258,3 +270,5 @@ Alert(GetAlert('success'), 'success');
         font-size: 12px;
     }
 </style>
+
+<?php }?>

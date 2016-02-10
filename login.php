@@ -4,11 +4,14 @@ session_start();
 include_once './lib/application.php';
 
 if ($_COOKIE['user'] != '') {
-    header('location:' . ADDRESS . 'staff');
+    header('location:' . ADDRESS . 'repair_add_user');
     die();
 }
 
-if ($_POST['submit_bt'] == 'เข้าระบบ') {
+if ($_POST['submit_bt'] == 'เข้าระบบ' || $_POST['submit_bt'] == 'เข้าสู่ระบบ') {
+
+    // print_r($_POST);
+    //die();
 
     $username = trim($_POST['username']);
 
@@ -37,8 +40,8 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
 
 
         if ($row['password'] == $getPass) {
-         
-           $_SESSION['group'] = $row['status'] ;
+
+            $_SESSION['group'] = $row['status'];
 
             $_SESSION['user_id'] = $row['id']; //กำหนด session user_id
             $_SESSION['username'] = $username; //กำหนด session username
@@ -48,27 +51,33 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
             $ck_expire = time() + ($ck_expire_hour * 60 * 60); // กำหนดเวลาหมดอายุของคุกกี้
 
             setcookie("user", $username, $ck_expire); // set cookie
-            ?>
+//            if ($_GET['page'] == 'select_idcard') {
+//                  header('location:' . $_GET['page'].'.php'); //ให้ไปสู่หน้า staff
+//                  die();
+//            }
+//            if ($_GET['controllers'] != '') {
+//                 header('location:'.ADDRESS.$_GET['controllers'] );
+//                   die();
+//            }
 
-
-            <?php
-            if ($_GET['page'] == 'select_idcard') {
-                  header('location:' . $_GET['page'].'.php'); //ให้ไปสู่หน้า staff
-                  die();
+            if ($_SESSION['group'] == 'ผู้บริหาร') {
+                header('location:' . ADDRESS . "report_type"); //ให้ไปสู่หน้า repair
+                die();
             }
-            if ($_GET['controllers'] != '') {
-                 header('location:'.ADDRESS.$_GET['controllers'] );
-                   die();
+            if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
+                header('location:' . ADDRESS . "repair"); //ให้ไปสู่หน้า repair
+                die();
             }
-
-            header('location:' . ADDRESS . "repair"); //ให้ไปสู่หน้า repair
-            die();
         } else {
             SetAlert('ชื่อผู้ใช้ กับรหัสผ่านไม่ตรงกัน กรุณาลองใหม่อีกครั้ง');
+            header('location:' . ADDRESS . "repair_add_user");
+            die();
         }
     } else {
 
         SetAlert('ไม่มีชื่อผู้ใช้นี้ กรุณาลองใหม่อีกครั้ง');
+          header('location:' . ADDRESS . "repair_add_user");
+            die();
     }
 }
 ?>
@@ -254,13 +263,13 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
                         </div>
                         <div class="panel-body">
                             <div>
-                                <?php
+<?php
 // Report errors to the user
 
-                                Alert(GetAlert('error'));
+Alert(GetAlert('error'));
 
-                                Alert(GetAlert('success'), 'success');
-                                ?>
+Alert(GetAlert('success'), 'success');
+?>
                             </div>
                             <form role="form" method="POST" action="">
                                 <fieldset>
@@ -270,11 +279,7 @@ if ($_POST['submit_bt'] == 'เข้าระบบ') {
                                     <div class="form-group">
                                         <input class="form-control" placeholder="Password" name="password" type="password" value="">
                                     </div>
-                                    <div class="checkbox hidden">
-                                        <label>
-                                            <input name="remember" type="checkbox" value="Remember Me">Remember Me
-                                        </label>
-                                    </div>
+
                                     <!-- Change this to a button or input when using this as a form -->
                                     <button type="submit" name="submit_bt" value="เข้าระบบ" class="btn btn-lg btn-success btn-block">Login </button>
                                 </fieldset>

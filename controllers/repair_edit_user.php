@@ -1,13 +1,6 @@
-<?php if ($_SESSION['group'] == '' || $_SESSION['group'] == 'ผู้บริหาร') { ?>
-    <div class="row">
-        <div class="col-md-12" style="margin-bottom: 10px;">
-            <p>&nbsp;</p>
-            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
-        </div>
-    </div>
-<?php
 
-}else{
+<?php
+//เช็คการส่งค่า POST ของฟอร์ม
 
 
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
@@ -31,13 +24,11 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
         }
 
         $data2 = array(
-
-        "status" => $computer_status, // สถานะ computer
-        "updated_at" => DATE_TIME, //วันที่แก้ไข
-
+            "status" => $computer_status, // สถานะ computer
+            "updated_at" => DATE_TIME, //วันที่แก้ไข
         );
-        
-        update('tb_computer', $data2, 'id = '.$_POST['computer_id']);
+
+        update('tb_computer', $data2, 'id = ' . $_POST['computer_id']);
     }
     //อัพโหลดภาพ
     if (isset($_FILES['file_array'])) {
@@ -100,14 +91,14 @@ Alert(GetAlert('success'), 'success');
     <div class="col-lg-12">
         <h1 class="page-header">
 
-            ข้อมูลการแจ้งซ่อม
+            ข้อมูลการติดตามปัญหาที่แจ้ง
 
         </h1>
 
     </div>
     <!-- /.col-lg-12 -->
 </div>
-<div class="row">
+<div class="row hidden" >
     <div class="col-md-12 col-xs-12">
         <p id="breadcrumb">
             <a href="<?= ADDRESS ?>repair">ข้อมูลทั้งหมด</a>
@@ -180,15 +171,15 @@ Alert(GetAlert('success'), 'success');
     <!-- /.col-lg-12 -->
 </div>
 <div class="row">
-    <?php
-    $sql = "SELECT * FROM tb_repair_list WHERE repair_id = " . $_GET['id'];
-    $result = mysql_query($sql);
+<?php
+$sql = "SELECT * FROM tb_repair_list WHERE repair_id = " . $_GET['id'];
+$result = mysql_query($sql);
 
-    $targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/';
+$targetPath = dirname($_SERVER['PHP_SELF']) . '/dist/images/media/';
 
-    if (mysql_num_rows($result) > 0) {
-        while ($row = mysql_fetch_assoc($result)) {
-            ?>
+if (mysql_num_rows($result) > 0) {
+    while ($row = mysql_fetch_assoc($result)) {
+        ?>
             <div class="col-md-6">
                 <div class="panel panel-default">
                     <div class="panel-heading">
@@ -231,26 +222,27 @@ Alert(GetAlert('success'), 'success');
                                             <div class="row da-form-row ">
                                                 <label class="col-md-2">ภาพคอมพิวเตอร์</label>
                                                 <div class="col-md-10">
-                                                    <?php if ($_GET['id'] != '') { ?>
-                                                        <img src="<?= './dist/images/media/' . getDataDesc('image', 'tb_computer', 'id=' . $row['computer_id']) ?>" style="max-width: 100%;" class="img-thumbnail"> 
+        <?php if ($_GET['id'] != '') { ?>
+                                                        <img src="<?= './dist/images/media/' . getDataDesc('image', 'tb_computer', 'id=' . $row['computer_id']) ?>" class="img-responsive"> 
                                                     <?php } ?>
                                                     <p class="help-block"></p>
                                                 </div>
                                             </div>
                                         </fieldset>
                                         <fieldset class="scheduler-border">
-                                            <legend class="scheduler-border">ลงบันทึกอาการ </legend>
+                                            <legend class="scheduler-border">ข้อมูลอาการปัจจุบัน </legend>
 
                                             <div class="row da-form-row">
-                                                <label class="col-md-2">สถานะ <span class="required">*</span></label>
+                                                <label class="col-md-2">สถานะปัจจุบัน <span class="required">*</span></label>
                                                 <div class="col-md-10">
-                                                    <select class="form-control" name="status" required="">
-                                                        <option value="" <?= $row['status'] == '' ? 'selected' : '' ?>>---- ลงบันทึกอาการ ----</option> 
+                                                    <select class="form-control hidden" name="statuss" disabled="" >
+                                                        <option value="" <?= $row['status'] == '' ? 'selected' : '' ?>>---- รอลงบันทึกอาการ ----</option> 
                                                         <option value="ซ่อมแล้ว" <?= $row['status'] == 'ซ่อมแล้ว' ? 'selected' : '' ?>>ซ่อมแล้ว</option> 
                                                         <option value="รอการแก้ไข" <?= $row['status'] == 'รอการแก้ไข' ? 'selected' : '' ?>>รอการแก้ไข</option>
                                                         <option value="ส่งซ่อมข้างนอก" <?= $row['status'] == 'ส่งซ่อมข้างนอก' ? 'selected' : '' ?>>ส่งซ่อมข้างนอก</option> 
                                                         <option value="แทงจำหน่าย" <?= $row['status'] == 'แทงจำหน่าย' ? 'selected' : '' ?>>แทงจำหน่าย</option> 
                                                     </select>
+                                                    <input class="form-control input-sm" readonly="" name="computer_id" type="text" value="<?php echo $row['status'] == '' ? 'อยู่ระหว่างดำเนินการ' : $row['status']  ?>">
                                                     <p class="help-block">
                                                         - ซ่อมได้ทันที ลงบันทึกอาการ สถานะ <span class="badge">ซ่อมแล้ว</span> <br>
                                                         - ซ่อมได้แต่ต้องรออุปกรณ์ ลงบันทึกอาการ สถานะ <span class="badge">รอการแก้ไข</span><br>
@@ -258,6 +250,13 @@ Alert(GetAlert('success'), 'success');
                                                         - ซ่อมไม่ได้ ลงบันทึกอาการ สถานะ <span class="badge">แทงจำหน่าย</span>
 
                                                     </p>
+                                                </div>
+                                            </div>
+                                            <div class="row da-form-row">
+                                                <label class="col-md-2">วันที่ซ่อม <span class="required"></span></label>
+                                                <div class="col-md-10">
+                                                    <input type="text" class="form-control" value="<?= $row['date_success'] == '0000-00-00 00:00:00' ? '-' :  ShowDate($row['date_success'])   ?>">
+                                                    <p class="help-block"></p>
                                                 </div>
                                             </div>
                                             <div class="row da-form-row">
@@ -271,7 +270,7 @@ Alert(GetAlert('success'), 'success');
 
 
 
-                                        <div class="row ">
+                                        <div class="row hidden">
                                             <div class="">
                                                 <div class="btn-row">
                                                     <button type="submit" name="btn_submit" value="บันทึกข้อมูล" class="btn btn-sm btn-success">บันทึกข้อมูล</button>
@@ -293,7 +292,7 @@ Alert(GetAlert('success'), 'success');
                 <!-- /.panel-body -->
             </div>
 
-        <?php } ?>
+    <?php } ?>
     <?php } ?>
 
     <!-- /.panel -->
@@ -349,5 +348,3 @@ Alert(GetAlert('success'), 'success');
         border-bottom:none;
     }
 </style>
-
-<?php }?>

@@ -1,5 +1,13 @@
-
+<?php if ($_SESSION['group'] == '' || $_SESSION['group'] == 'ผู้บริหาร') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
 <?php
+
+}else{
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
     //ถ้าว่างทำส่วนนี้ คือ เพิม่ลงฐานข้อมูล
     $data = array(
@@ -113,3 +121,4 @@ Alert(GetAlert('success'), 'success');
 
 </script>
 
+<?php }?>

@@ -5,6 +5,6 @@ session_destroy();
 
 
 //header("Location: login.php?controllers=".$_GET['page']); //ส่งไปยังหน้าที่ตอ้งการ  
-header("Location: login.php");
+header("Location: ".ADDRESS.'repair_add_user');
 
 ?>

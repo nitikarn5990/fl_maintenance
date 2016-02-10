@@ -1,5 +1,13 @@
-
+<?php if ($_SESSION['group'] == '') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
 <?php
+
+}else{
 //เช็คการส่งค่า POST ของฟอร์ม
 //var_dump(strpos('staff', 'staff'));
 if ($_SESSION['group'] != 'ผู้ดูแลระบบ') {
@@ -12,7 +20,6 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
- 
             "address" => $_POST['address'],
             "email" => $_POST['email'],
             "tel" => $_POST["tel"],
@@ -23,12 +30,11 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
-        
             "address" => $_POST['address'],
             "email" => $_POST['email'],
             "tel" => $_POST["tel"],
             "status" => $_POST["status"],
-             "password" => $_POST['password'],
+            "password" => $_POST['password'],
             "updated_at" => DATE_TIME, //วันที่แก้ไข
         );
     }
@@ -72,8 +78,6 @@ if (isset($_GET['id']) && $_GET['id'] != '' && is_numeric($_GET['id'])) {
         }
     }
 }
-
-
 ?>
 <?php
 // แสดงการแจ้งเตือน
@@ -86,19 +90,19 @@ Alert(GetAlert('success'), 'success');
     <div class="col-lg-12">
         <h1 class="page-header">
 
-            <?php
-            if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
+<?php
+if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
 
-                if ($_GET['action'] == 'repassword') {
-                    echo "เปลี่ยนรหัสผ่าน";
-                    $uri_action = '&action=repassword';
-                } else {
-                    echo "แก้ไขข้อมูลเจ้าหน้าที่";
-                }
-            } else {
-                echo "ข้อมูลส่วนตัว";
-            }
-            ?>
+    if ($_GET['action'] == 'repassword') {
+        echo "เปลี่ยนรหัสผ่าน";
+        $uri_action = '&action=repassword';
+    } else {
+        echo "แก้ไขข้อมูลเจ้าหน้าที่";
+    }
+} else {
+    echo "ข้อมูลส่วนตัว";
+}
+?>
 
         </h1>
 
@@ -107,22 +111,22 @@ Alert(GetAlert('success'), 'success');
 </div>
 <div class="row">
     <div class="col-lg-12">
-        <?php if ($_GET['id'] == '') { ?>
+<?php if ($_GET['id'] == '') { ?>
             <p id="breadcrumb">
 
                 เปลี่ยนรหัสผ่าน
             </p>
-        <?php } else { ?>
+<?php } else { ?>
             <p id="breadcrumb">
-                <?php if ($_SESSION['group'] == 'เจ้าหน้าที่') { ?>
+    <?php if ($_SESSION['group'] == 'เจ้าหน้าที่') { ?>
                     แก้ไขข้อมูลเจ้าหน้าที่
-                <?php } else { ?>
+            <?php } else { ?>
                     <a href="<?= ADDRESS ?>staff">ข้อมูลพนักงานทั้งหมด</a>
                     แก้ไขข้อมูลเจ้าหน้าที่
                 <?php } ?>
 
             </p>
-        <?php } ?>
+            <?php } ?>
 
     </div>
 </div>
@@ -131,20 +135,20 @@ Alert(GetAlert('success'), 'success');
         <div class="panel panel-default">
             <div class="panel-heading">
 
-                <?php
-                if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
-                    if ($_GET['action'] == 'repassword') {
-                        echo "<i class=icol-key></i> ";
-                        echo "เปลี่ยนรหัสผ่าน";
-                    } else {
-                        echo "<i class=icol-add></i> ";
-                        echo "แก้ไขข้อมูลเจ้าหน้าที่";
-                    }
-                } else {
-                    echo "<i class='fa fa-pencil-square-o'></i> ";
-                    echo "แก้ไขข้อมูลส่วนตัว";
-                }
-                ?>
+<?php
+if ($_SESSION['group'] == 'ผู้ดูแลระบบ') {
+    if ($_GET['action'] == 'repassword') {
+        echo "<i class=icol-key></i> ";
+        echo "เปลี่ยนรหัสผ่าน";
+    } else {
+        echo "<i class=icol-add></i> ";
+        echo "แก้ไขข้อมูลเจ้าหน้าที่";
+    }
+} else {
+    echo "<i class='fa fa-pencil-square-o'></i> ";
+    echo "แก้ไขข้อมูลส่วนตัว";
+}
+?>
 
             </div>
             <div class="panel-body">
@@ -153,7 +157,7 @@ Alert(GetAlert('success'), 'success');
                         <form role="form" action="<?= ADDRESS ?>staff_edit&id=<?= $_GET['id'] ?><?= isset($uri_action) ? $uri_action : '' ?>" method="POST">
                             <input type="hidden" name="action" value="<?= isset($_GET['action']) ? $_GET['action'] : '' ?>">     
                             <input type="hidden" name="id" value="<?= isset($_GET['id']) ? $_GET['id'] : '' ?>">    
-                            <?php if ($_GET['id'] != '') { ?>    
+<?php if ($_GET['id'] != '') { ?>    
                                 <div class="row da-form-row">
                                     <label class="col-md-2">ชื่อ <span class="required">*</span></label>
                                     <div class="col-md-10">
@@ -190,22 +194,22 @@ Alert(GetAlert('success'), 'success');
                                         <p class="help-block"></p>
                                     </div>
                                 </div>
-                            
-                             <?php if ($row['status'] != 'ผู้ดูแลระบบ') { ?>   
-                              <div class="row  da-form-row">
-                                <label class="col-md-2">สถานะ <span class="required">*</span></label>
-                                <div class="col-md-10">
-                                    <select name="status" class="form-control">
-                                        <option value="">--- เลือกสถานะ ---</option>
-                                        <option value="เจ้าหน้าที่" <?= $row['status'] == 'เจ้าหน้าที่' ? 'selected' : '' ?>> เจ้าหน้าที่</option>
-                                        <option value="ผู้บริหาร" <?= $row['status'] == 'ผู้บริหาร' ? 'selected' : '' ?>> ผู้บริหาร</option>
-                                    </select>
-                                    <p class="help-block"></p>
-                                </div>
-                            </div>
-                               <?php } ?>
-                            <?php } ?>
-                            <?php if ($_SESSION['group'] == 'ผู้ดูแลระบบ' || $_SESSION['group'] == 'ผู้บริหาร' ||  $_SESSION['group'] == 'เจ้าหน้าที่') { ?>          
+
+    <?php if ($row['status'] != 'ผู้ดูแลระบบ') { ?>   
+                                    <div class="row  da-form-row hidden">
+                                        <label class="col-md-2">สถานะ <span class="required">*</span></label>
+                                        <div class="col-md-10">
+                                            <select name="status" class="form-control">
+                                                <option value="">--- เลือกสถานะ ---</option>
+                                                <option value="เจ้าหน้าที่" <?= $row['status'] == 'เจ้าหน้าที่' ? 'selected' : '' ?>> เจ้าหน้าที่</option>
+                                                <option value="ผู้บริหาร" <?= $row['status'] == 'ผู้บริหาร' ? 'selected' : '' ?>> ผู้บริหาร</option>
+                                            </select>
+                                            <p class="help-block"></p>
+                                        </div>
+                                    </div>
+    <?php } ?>
+<?php } ?>
+<?php if ($_SESSION['group'] == 'ผู้ดูแลระบบ' || $_SESSION['group'] == 'ผู้บริหาร' || $_SESSION['group'] == 'เจ้าหน้าที่') { ?>          
 
                                 <div class="row">
                                     <div class="panel-toolbar" style="padding: 5px 15px 0 15px;">
@@ -227,7 +231,7 @@ Alert(GetAlert('success'), 'success');
                                         <p class="help-block">ไม่ต่ำกว่า 6 ตัวอักษร</p>
                                     </div>
                                 </div>
-                            <?php } ?>
+<?php } ?>
                             <div class="row ">
                                 <div class="">
                                     <div class="btn-row">
@@ -303,4 +307,5 @@ Alert(GetAlert('success'), 'success');
     });
 
 </script>
+<?php }?>
 

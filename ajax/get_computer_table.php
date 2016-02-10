@@ -38,7 +38,7 @@ if ($numRow > 0) {
                 
                     <td class='center'>$id</td>
                     <td class='center'><img src='$image' class='img-responsive' style='width: 100px;margin:auto;'></td>
-                       <td class='center'><textarea rows='5' name='problem_description' class='form-control'></textarea></td>
+                       <td class='center'><textarea rows='5' name='problem_description[]' required class='form-control'></textarea></td>
 <td class='center'><a href='javascript:;' onclick='_submit($_ID);'  class='btn btn-sm btn-danger'>ลบ</a></td>
                 
         </tr>";

@@ -1,9 +1,20 @@
+<?php if ($_SESSION['group'] == '') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
+<?php
+
+}else{ ?>
 <!-- Latest compiled and minified CSS -->
 <link href="./plugins/datepicker/jquery.datepick.css" rel="stylesheet">
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
 <script src="./plugins/datepicker/jquery.plugin.js"></script>
 <script src="./plugins/datepicker/jquery.datepick.js"></script>
 <script src="./plugins/datepicker/jquery.datepick-th.js"></script>
+
 <?php
 //ยกเลิกการยืม
 if ($_GET['action'] == 'cancel' && is_numeric($_GET['id']) && $_GET['id'] != '') {
@@ -158,11 +169,11 @@ Alert(GetAlert('success'), 'success');
                 <div class="panel-body" style="padding-top: 15px;">
                     <div class="table-responsive">
                         <div class="dataTable_wrapper">
-                            <table class="table table-striped table-bordered table-hover" id="dataTables-example2">
+                            <table class="table table-striped table-bordered table-hover" id="dataTables-example2" style="width: 1200px;">
                                 <thead>
                                     <tr>
 
-                                        <th class="center">รหัสการแจ้ง</th>
+                                        <th class="center" style="width: 10%;">รหัสการแจ้ง</th>
                                         <th class="center">ประเภท</th>
                                         <th class="center">รหัสคอมพิวเตอร์</th>
                                         <th class="center">ภาพ</th>
@@ -276,7 +287,7 @@ Alert(GetAlert('success'), 'success');
                                                 <td class="center"> <?= $row['problem_description'] ?></td>
 
                                                 <td class="center"> <?= ShowDate($row['date_input']) ?></td>
-                                                <td class="center "> <?= $row['status'] ?></td>
+                                                <td class="center "> <?= $row['status'] == '' ? 'อยู่ระหว่างดำเนินการ' : $row['status'] ?></td>
                                                 <td class="center"> <?= ShowDate($row['date_success']) ?></td>
                                                 <?php if ($_SESSION['group'] == 'ผู้บริหาร' || $_SESSION['group'] == 'ผู้ดูแลระบบ') { ?>
                                                     <td class="center"> <?= getDataDesc('first_name', 'tb_staff', 'id = ' . $row['staff_id']) ?></td>
@@ -372,3 +383,4 @@ Alert(GetAlert('success'), 'success');
         font-size: 12px;
     }
 </style>
+<?php }?>

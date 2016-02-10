@@ -6,14 +6,14 @@ include_once './lib/application.php';
 
 if ($_COOKIE['user'] == '') {
 
-    header('location:login.php?page=select_idcard');
-    die();
+   // header('location:login.php?page=select_idcard');
+   // die();
 }
 if ($_SESSION ['user_id'] != "") {
     
 } else {
-    header('location:login.php?page=select_idcard');
-    die();
+   // header('location:login.php?page=select_idcard');
+   // die();
 }
 ?>
 

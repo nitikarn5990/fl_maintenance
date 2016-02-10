@@ -1,14 +1,36 @@
-
+<?php if ($_SESSION['group'] == '' || $_SESSION['group'] == 'ผู้บริหาร') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
 <?php
+
+}else{
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
-    if ($_POST['media_id'] == '') {
-        SetAlert('กรุณาเลือกคอมพิวเตอร์ที่ต้องการแจ้งซ่อม'); //แสดงข้อมูลแจ้งเตือน
+    $c = 0;
+    foreach ($_POST['problem_description'] as $problem_description) {
+        if (trim($problem_description) == '') {
+            $c = $c + 1;
+        }
+    }
+
+    if ($_POST['media_id'] == '' || $c > 0) {
+        if ($_POST['media_id'] = '') {
+            SetAlert('กรุณาเลือกคอมพิวเตอร์ที่ต้องการแจ้งซ่อม'); //แสดงข้อมูลแจ้งเตือน
+        }
+        if ($c > 0) {
+            SetAlert('กรุณาใส่ปัญหา'); //แสดงข้อมูลแจ้งเตือน
+        }
     } else {
+
         //ถ้าว่างทำส่วนนี้ คือ เพิม่ลงฐานข้อมูล
         $data = array(
             "first_name" => $_POST['first_name'],
             "last_name" => $_POST['last_name'],
             "staff_id" => $_SESSION['user_id'],
+            "tel" => $_POST['tel'],
             // "problem_description" => $_POST['problem_description'],
             "created_at" => DATE_TIME, //
             "updated_at" => DATE_TIME, //
@@ -20,12 +42,12 @@ if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช�
                 $arrIDMedia = explode(',', $_POST['media_id']);
 
                 $repair_id = getDataDescLastID("id", 'tb_repair');
-                foreach ($arrIDMedia as $value) {
+                foreach ($arrIDMedia as $key => $value) {
                     $data = array(
                         "repair_id" => $repair_id, //รหัสการแจ้ง
                         "computer_id" => $value, //รหัสคอมพิวเตอร์
                         "status" => '', //
-                        "problem_description" => $_POST['problem_description'],
+                        "problem_description" => $_POST['problem_description'][$key],
                         "created_at" => DATE_TIME, //
                         "updated_at" => DATE_TIME, //
                         "date_input" => DATE_TIME, //
@@ -238,6 +260,9 @@ Alert(GetAlert('success'), 'success');
                 required: true,
                 number: true,
             },
+            problem_description: {
+                required: true,
+            },
         },
         messages: {
         },
@@ -265,3 +290,4 @@ Alert(GetAlert('success'), 'success');
 <style>
     .datagrid table { border-collapse: collapse; text-align: left; width: 100%; } .datagrid {font: normal 12px/150% Arial, Helvetica, sans-serif; background: #fff; overflow: hidden; border: 1px solid #006699; -webkit-border-radius: 3px; -moz-border-radius: 3px; border-radius: 3px; }.datagrid table td, .datagrid table th { padding: 3px 9px; }.datagrid table thead th {background:-webkit-gradient( linear, left top, left bottom, color-stop(0.05, #006699), color-stop(1, #00557F) );background:-moz-linear-gradient( center top, #006699 5%, #00557F 100% );filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#006699', endColorstr='#00557F');background-color:#006699; color:#FFFFFF; font-size: 15px; font-weight: bold; border-left: 1px solid #0070A8; } .datagrid table thead th:first-child { border: none; }.datagrid table tbody td { color: #00496B; border-left: 1px solid #E1EEF4;font-size: 12px;font-weight: normal; }.datagrid table tbody .alt td { background: #E1EEF4; color: #00496B; }.datagrid table tbody td:first-child { border-left: none; }.datagrid table tbody tr:last-child td { border-bottom: none; }
 </style>
+<?php }?>

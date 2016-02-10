@@ -1,5 +1,13 @@
-
+<?php if ($_SESSION['group'] == '' || $_SESSION['group'] == 'ผู้บริหาร') { ?>
+    <div class="row">
+        <div class="col-md-12" style="margin-bottom: 10px;">
+            <p>&nbsp;</p>
+            <img src="./dist/images/404.png" class="img-responsive" style="margin: auto;">
+        </div>
+    </div>
 <?php
+
+}else{
 //เช็คการส่งค่า POST ของฟอร์ม
 //var_dump(strpos('category', 'category'));
 
@@ -160,3 +168,4 @@ Alert(GetAlert('success'), 'success');
 
 </script>
 
+<?php }?>
