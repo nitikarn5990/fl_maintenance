@@ -26,10 +26,10 @@
             <?php } ?>
             <?php if ($_SESSION['group'] == '') { ?>
                 <li>
-                    <a href="<?= ADDRESS ?>repair_add_user" class="<?= substr($_GET['controllers'], 0, 15) == 'repair_add_user' ? 'active' : '' ?>"> <i class="fa fa-table fa-fw"></i> แจ้งซ่อม</a>
+                    <a href="<?= ADDRESS ?>repair_add_user" class="<?= substr($_GET['controllers'], 0, 15) == 'repair_add_user' || substr($_GET['controllers'], 0, 15) == '' ? 'active' : '' ?>"> <i class="fa fa-table fa-fw"></i> แจ้งซ่อม</a>
                 </li>
                 <li>
-                    <a href="<?= ADDRESS ?>repair_user" class="<?= substr($_GET['controllers'], 0, 6) == '' ? 'active' : '' ?>"> <i class="fa fa-table fa-fw"></i> ติดตามปัญหาที่แจ้ง	</a>
+                    <a href="<?= ADDRESS ?>repair_user" class="<?= substr($_GET['controllers'], 0, 11) == 'repair_user' ? 'active' : '' ?>"> <i class="fa fa-table fa-fw"></i> ติดตามปัญหาที่แจ้ง	</a>
                 </li>
 
             <?php } ?>

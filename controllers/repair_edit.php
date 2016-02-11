@@ -11,15 +11,23 @@
 
 
 if ($_POST['btn_submit'] == 'บันทึกข้อมูล') { //เช็คว่ามีการกดปุ่ม บันทึกข้อมูล
-    //ทำการอัพเดรต ส่วนแรกคือชื่อฟิลล์ในฐานข้อมูล ส่วนที่สองคือ POST ที่มาจากฟอร์ม (จับคู่ให้ตรงกัน)
+  //แก้ไขผู้ดำเนินการ
+    $dataUpdateStaffID = array(
+        "staff_id" => $_SESSION['user_id'], 
+        "updated_at" => DATE_TIME, //วันที่แก้ไข
+  
+    );
+    update("tb_repair", $dataUpdateStaffID, "id = " . $_GET['id'] );
+    //
+    
     $data = array(
         "comment" => $_POST['comment'], // จำนวน
         "status" => $_POST['status'], // สถานะ
         "updated_at" => DATE_TIME, //วันที่แก้ไข
         "date_success" => DATE_TIME, //วันที่แก้ไข
+        "staff_id" => $_SESSION['user_id'], 
     );
-
-
+    
 // update ข้อมูลลงในตาราง tb_repair_list โดยฃื่อฟิลด์ และค่าตามตัวแปร array ชื่อ $data
     if (update("tb_repair_list", $data, "repair_id = " . $_GET['id'] . " AND computer_id = " . $_POST['computer_id'])) { //ชื่อตาราง,ข้อมูลจากตัวแปร $data,id ที่จะทำการแก้ไข
         if ($_POST['status'] == 'ซ่อมแล้ว') {

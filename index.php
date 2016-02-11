@@ -3,6 +3,12 @@ ob_start();
 session_start();
 include_once './lib/application.php';
 
+//if ($_SESSION ['group'] == "") {
+//header('location:index.php?controllers=repair_add_user');
+// die();
+//echo 'ss';
+//}
+
 if ($_COOKIE['user'] == '') {
     // echo $_REQUEST['URI'];
     if ($_GET['controllers'] != '') {
@@ -84,10 +90,8 @@ if ($_SESSION ['user_id'] != "") {
                     <div class="col-md-12">
                         <?php
 // Report errors to the user
-
-                        Alert(GetAlert('error'));
-
-                        Alert(GetAlert('success'), 'success');
+                        //   Alert(GetAlert('error'));
+                        //  Alert(GetAlert('success'), 'success');
                         ?>
                     </div>
                 </div>
@@ -100,7 +104,7 @@ if ($_SESSION ['user_id'] != "") {
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="index.html" style="color: #A51800;">
+                    <a class="navbar-brand" href="javascript:;" style="color: #A51800;">
                         <label> 
                             <b> 
                                 ยินดีต้อนรับ :  <?= $_SESSION['group'] != '' ? $_SESSION['group'] : 'ผู้ใช้บริการทั่วไป' ?>  
@@ -202,9 +206,13 @@ if ($_SESSION ['user_id'] != "") {
             <div id="page-wrapper">
                 <?php
 //เช็ค url controllers ไม่ใช่ค่าว่าง และ มีไฟล์ที่อยู่ในโฟลเดอร์ controllers อยู่จริง
-                if (isset($_GET['controllers']) && file_exists('./controllers/' . $_GET['controllers'] . '.php')) {
+                if ($_GET['controllers'] == "") {
+                    include './controllers/repair_add_user.php';
+                } else {
+                    if (isset($_GET['controllers']) && file_exists('./controllers/' . $_GET['controllers'] . '.php')) {
 
-                    include './controllers/' . $_GET['controllers'] . '.php'; // นำไฟล์ที่ได้จาก $_GET['controllers'] มา include
+                        include './controllers/' . $_GET['controllers'] . '.php'; // นำไฟล์ที่ได้จาก $_GET['controllers'] มา include
+                    }
                 }
                 ?>
                 <!-- /.row -->
